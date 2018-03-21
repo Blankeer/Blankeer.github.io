@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>[Huginn]我在 slack 发条消息,然后我的 vps 就重启了 | Blanke&#39;s Blog | Blanke&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Huginn,VPS,Slack">
+    <meta name="description" content="需求有时候重启 vps,需要登录在网页上操作,很麻烦,查了下有相关的 api 做这个事,最好是我在 slack 里发条消息(重启 xx 主机),然后自动重启. 重点实现的重点是 怎么让 Huginn 收到 slack 的消息,huginn 上的 slack agent 是发送消息到 slack, 而不能反过来,查了下 slack 文档,能实现的是 bot 和 app,决定采用 app 实现首先在">
+<meta name="keywords" content="Huginn,VPS,Slack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Huginn]我在 slack 发条消息,然后我的 vps 就重启了">
+<meta property="og:url" content="https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/index.html">
+<meta property="og:site_name" content="Blanke&#39;s Blog">
+<meta property="og:description" content="需求有时候重启 vps,需要登录在网页上操作,很麻烦,查了下有相关的 api 做这个事,最好是我在 slack 里发条消息(重启 xx 主机),然后自动重启. 重点实现的重点是 怎么让 Huginn 收到 slack 的消息,huginn 上的 slack agent 是发送消息到 slack, 而不能反过来,查了下 slack 文档,能实现的是 bot 和 app,决定采用 app 实现首先在">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1340121-37da6845c7df611f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1340121-b39fb2b07a3871b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1340121-eb52e6cfc886dfdf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1340121-ebe61920ae3c44b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-03-21T16:44:39.788Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[Huginn]我在 slack 发条消息,然后我的 vps 就重启了">
+<meta name="twitter:description" content="需求有时候重启 vps,需要登录在网页上操作,很麻烦,查了下有相关的 api 做这个事,最好是我在 slack 里发条消息(重启 xx 主机),然后自动重启. 重点实现的重点是 怎么让 Huginn 收到 slack 的消息,huginn 上的 slack agent 是发送消息到 slack, 而不能反过来,查了下 slack 文档,能实现的是 bot 和 app,决定采用 app 实现首先在">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1340121-37da6845c7df611f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+        <link rel="alternate" type="application/atom+xml" title="Blanke&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Blanke</h5>
+          <a href="mailto:blankeeee@gmail.com" title="blankeeee@gmail.com" class="mail">blankeeee@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/blankeer" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">[Huginn]我在 slack 发条消息,然后我的 vps 就重启了</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">[Huginn]我在 slack 发条消息,然后我的 vps 就重启了</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-21T16:43:51.000Z" itemprop="datePublished" class="page-time">
+  2018-03-22
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Huginn/">Huginn</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#需求"><span class="post-toc-number">1.</span> <span class="post-toc-text">需求</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#重点"><span class="post-toc-number">2.</span> <span class="post-toc-text">重点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实现"><span class="post-toc-number">3.</span> <span class="post-toc-text">实现</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Huginn-我在-slack-发条消息-然后我的-vps-就重启了"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">[Huginn]我在 slack 发条消息,然后我的 vps 就重启了</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-22 00:43:51" datetime="2018-03-21T16:43:51.000Z"  itemprop="datePublished">2018-03-22</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Huginn/">Huginn</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>有时候重启 vps,需要登录在网页上操作,很麻烦,查了下有相关的 <a href="https://www.alibabacloud.com/help/zh/doc-detail/25502.htm?spm=a3c0i.o25485zh.a3.16.18627bd1b51rF5" target="_blank" rel="noopener">api</a> 做这个事,最好是我在 slack 里发条消息(重启 xx 主机),然后自动重启.</p>
+<h2 id="重点"><a href="#重点" class="headerlink" title="重点"></a>重点</h2><p>实现的重点是 怎么让 Huginn 收到 slack 的消息,huginn 上的 slack agent 是发送消息到 slack, 而不能反过来,查了下 slack 文档,能实现的是 <a href="https://api.slack.com/bot-users" target="_blank" rel="noopener">bot</a> 和 <a href="https://api.slack.com/slack-apps" target="_blank" rel="noopener">app</a>,决定采用 app</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>首先在 huginn 创建 <code>WebhookAgent</code>,options 如下:<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  "secret": "123456",//这里随便填</span><br><span class="line">  "expected_receive_period_in_days": 1,</span><br><span class="line">  "payload_path": ".",</span><br><span class="line">  "code": "200",</span><br><span class="line">  "response": "&#123;&#123;challenge&#125;&#125;"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>response 必须是<code></code>,然后创建,可以看到 webhook api url ,一般是这种形式 <a href="http://1.2.3.4/users/1/web_requests/1/123456" target="_blank" rel="noopener">http://1.2.3.4/users/1/web_requests/1/123456</a>, 记下来,下一步会用.<br>然后在 slack 创建 app, 然后创建 Event Subscriptions,<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://upload-images.jianshu.io/upload_images/1340121-37da6845c7df611f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure><br>然后填上上一步的 url, 添加 event, 填写 url 后会检查,如果失败,请检查上一步创建的 agent.<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://upload-images.jianshu.io/upload_images/1340121-b39fb2b07a3871b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure><br>install APP, 然后授权下<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://upload-images.jianshu.io/upload_images/1340121-eb52e6cfc886dfdf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure><br>以上步骤就 ok 了,然后你在公共 channel 里发条消息,检查下 agent events 有没有相关 event,类似这样:<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://upload-images.jianshu.io/upload_images/1340121-ebe61920ae3c44b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure><br>然后写一个 <code>trigger agent</code> 过滤出<code>重启</code> 的消息,然后传递给一个 <code>Post agent</code>去调用 vps 的 API,测试下就 ok 了.</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-03-21T16:44:39.788Z" itemprop="dateUpdated">2018-03-22 00:44:39</time>
+</span><br>
+
+
+        
+        原始链接： <a href="/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/" target="_blank" rel="external">https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://blankeer.github.io">
+            <img src="/img/avatar.png" alt="Blanke">
+            Blanke
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Huginn/">Huginn</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Slack/">Slack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VPS/">VPS</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/&title=《[Huginn]我在 slack 发条消息,然后我的 vps 就重启了》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/&title=《[Huginn]我在 slack 发条消息,然后我的 vps 就重启了》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《[Huginn]我在 slack 发条消息,然后我的 vps 就重启了》 — Blanke's Blog&url=https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/22/Huginn-监控天气情况/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Huginn 监控天气情况</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "kcPiS1pwEDTH36W8q1p1jCFA-gzGzoHsz",
+            appKey: "rmU9mzztdjqK7Ql3LveykCdK",
+            avatar: "retro",
+            placeholder: "说点什么吧?",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Blanke &copy; 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/&title=《[Huginn]我在 slack 发条消息,然后我的 vps 就重启了》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/&title=《[Huginn]我在 slack 发条消息,然后我的 vps 就重启了》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《[Huginn]我在 slack 发条消息,然后我的 vps 就重启了》 — Blanke's Blog&url=https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADK0lEQVR42u3aS47iQBAFwL7/pZntSCPDe1lmBNnhVYs25YpCIsnPz098Pf66kv9e3Xn1rn/vv1rz6vp5x4WNjY39Jexkueev54xktYR6w9FgY2Njr2NffcPP7klCSx72nt/TroCNjY2NnSQPSeCZJTnJ3rCxsbGx27CRvJ6Uk04SD2xsbGzsPOSchLfzBCZf4bZaGjY2NvbHs/Ou6Of//Zb+NjY2NvYHsx/lddfYTbtO+94XCmxsbOxF7PMyUNvWbVOOe1MXbGxs7H3su4pHJ4wkFLUpx4tGAjY2NvYidl7QnwWY5LDuCml1WMXGxsZewW5bqrNgk4xpJoHntkPBxsbGXsSeNVBn4zjtESSBLW9mvPjMsbGxsb+cnbcE2uGYPETl7eHzMVBsbGzsTez8p/8stAxDyKg9nBzWi64INjY29gp2Xvp/R/IwWz9vP2NjY2PvY/+fhCHZVvv082IWNjY29ib2SfKQt2ln4W2W9hRNYmxsbOwvZ8/GbpJm7awgNRvZqZsH2NjY2EvZ50X5tpCUj+y0oS6aUcLGxsZex04e2c4BFc3XUQqUr4yNjY39G9j1m+PC/SzknB/9i/oZNjY29iL2i5sOAtjJyrNkJtotNjY29iJ2G0KePz555CwgJa/XDWZsbGzsFezZY9qjaY/spPX7CC5sbGzsTez2AclG2/Tj3QWmFzvBxsbG/nL2rEyTh73k4PJEYtaELkZ2sLGxsb+QnYSWGWNW1k8az+d7xsbGxt7ETkLFrOF6MrKTlLdma2JjY2PvY89Gc/IglKQ3d1V7ToaKsLGxsb+d3fYTHqNrNoIzS0vqiho2Njb2Cvbzsnvy477tLc9SiFnr97Ldi42Njb2I3Q7EnASqk3JSnVddPREbGxt7BXuWTsyKOLNEJelO12UsbGxs7EXs9qv/vMTTDvfMjj7fAzY2NvYOdvuYk/PLt9U2d+vUBRsbG3sduy3KnyQe97YE8kPExsbGxm5Ti2T9NhS1yMt3YWNjY/9idr6tdkTyfLUkiGJjY2NvZScJw2wEpy30zxq3yf3Y2NjYW9mzsn47WDNryuYfQN5IxsbGxl7E/gNIWlPvZh9YhgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

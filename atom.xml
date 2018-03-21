@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blankeer.github.io/"/>
-  <updated>2018-03-21T11:59:30.193Z</updated>
+  <updated>2018-03-21T16:44:39.788Z</updated>
   <id>https://blankeer.github.io/</id>
   
   <author>
@@ -15,6 +15,149 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>[Huginn]我在 slack 发条消息,然后我的 vps 就重启了</title>
+    <link href="https://blankeer.github.io/2018/03/22/Huginn-%E6%88%91%E5%9C%A8-slack-%E5%8F%91%E6%9D%A1%E6%B6%88%E6%81%AF-%E7%84%B6%E5%90%8E%E6%88%91%E7%9A%84-vps-%E5%B0%B1%E9%87%8D%E5%90%AF%E4%BA%86/"/>
+    <id>https://blankeer.github.io/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/</id>
+    <published>2018-03-21T16:43:51.000Z</published>
+    <updated>2018-03-21T16:44:39.788Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>有时候重启 vps,需要登录在网页上操作,很麻烦,查了下有相关的 <a href="https://www.alibabacloud.com/help/zh/doc-detail/25502.htm?spm=a3c0i.o25485zh.a3.16.18627bd1b51rF5" target="_blank" rel="noopener">api</a> 做这个事,最好是我在 slack 里发条消息(重启 xx 主机),然后自动重启.</p><h2 id="重点"><a href="#重点" class="headerlink" title="重点"></a>重点</h2><p>实现的重点是 怎么让 Huginn 收到 slack 的消息,huginn 上的 slack agent 是发送消息到 slack, 而不能反过来,查了下 slack 文档,能实现的是 <a href="https://api.slack.com/bot-users" target="_blank" rel="noopener">bot</a> 和 <a href="https://api.slack.com/slack-apps" target="_blank" rel="noopener">app</a>,决定采用 app</p><h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>首先在 huginn 创建 <code>WebhookAgent</code>,options 如下:<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  "secret": "123456",//这里随便填</span><br><span class="line">  "expected_receive_period_in_days": 1,</span><br><span class="line">  "payload_path": ".",</span><br><span class="line">  "code": "200",</span><br><span class="line">  "response": "&#123;&#123;challenge&#125;&#125;"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>response 必须是<code></code>,然后创建,可以看到 webhook api url ,一般是这种形式 <a href="http://1.2.3.4/users/1/web_requests/1/123456" target="_blank" rel="noopener">http://1.2.3.4/users/1/web_requests/1/123456</a>, 记下来,下一步会用.<br>然后在 slack 创建 app, 然后创建 Event Subscriptions,<figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://upload-images.jianshu.io/upload_images/1340121-37da6845c7df611f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">                </div>                <div class="image-caption">image.png</div>            </figure><br>然后填上上一步的 url, 添加 event, 填写 url 后会检查,如果失败,请检查上一步创建的 agent.<br><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://upload-images.jianshu.io/upload_images/1340121-b39fb2b07a3871b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">                </div>                <div class="image-caption">image.png</div>            </figure><br>install APP, 然后授权下<br><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://upload-images.jianshu.io/upload_images/1340121-eb52e6cfc886dfdf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">                </div>                <div class="image-caption">image.png</div>            </figure><br>以上步骤就 ok 了,然后你在公共 channel 里发条消息,检查下 agent events 有没有相关 event,类似这样:<figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://upload-images.jianshu.io/upload_images/1340121-ebe61920ae3c44b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">                </div>                <div class="image-caption">image.png</div>            </figure><br>然后写一个 <code>trigger agent</code> 过滤出<code>重启</code> 的消息,然后传递给一个 <code>Post agent</code>去调用 vps 的 API,测试下就 ok 了.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求&quot; class=&quot;headerlink&quot; title=&quot;需求&quot;&gt;&lt;/a&gt;需求&lt;/h2&gt;&lt;p&gt;有时候重启 vps,需要登录在网页上操作,很麻烦,查了下有相关的 &lt;a href=&quot;https://www.alibabacloud.com
+      
+    
+    </summary>
+    
+      <category term="Huginn" scheme="https://blankeer.github.io/categories/Huginn/"/>
+    
+    
+      <category term="Huginn" scheme="https://blankeer.github.io/tags/Huginn/"/>
+    
+      <category term="VPS" scheme="https://blankeer.github.io/tags/VPS/"/>
+    
+      <category term="Slack" scheme="https://blankeer.github.io/tags/Slack/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Huginn 监控天气情况</title>
+    <link href="https://blankeer.github.io/2018/03/22/Huginn-%E7%9B%91%E6%8E%A7%E5%A4%A9%E6%B0%94%E6%83%85%E5%86%B5/"/>
+    <id>https://blankeer.github.io/2018/03/22/Huginn-监控天气情况/</id>
+    <published>2018-03-21T16:42:14.000Z</published>
+    <updated>2018-03-21T16:42:34.699Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>监控天气是入门 agent 了,官方例子也有,我使用国内天气源,实现每两个小时通知我天气情况(温度,天气, pm2.5等)</p><h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><p>天气情况当然得找 API 了,使用了这个 <a href="https://github.com/jokermonn/-Api/blob/master/CenterWeather.md" target="_blank" rel="noopener">repo</a> 里的</p><h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"expected_update_period_in_days"</span>: <span class="string">"2"</span>,</span><br><span class="line">  <span class="attr">"url"</span>: <span class="string">"http://tj.nineton.cn/Heart/index/all?city=替换成自己城市 code"</span>,</span><br><span class="line">  <span class="attr">"type"</span>: <span class="string">"json"</span>,</span><br><span class="line">  <span class="attr">"mode"</span>: <span class="string">"on_change"</span>,</span><br><span class="line">  <span class="attr">"extract"</span>: &#123;</span><br><span class="line">    <span class="attr">"city_name"</span>: &#123;</span><br><span class="line">      <span class="attr">"path"</span>: <span class="string">"weather[0].city_name"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"now_info"</span>: &#123;</span><br><span class="line">      <span class="attr">"path"</span>: <span class="string">"weather[0].now.text"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"temperature"</span>: &#123;</span><br><span class="line">      <span class="attr">"path"</span>: <span class="string">"weather[0].now.temperature"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"pm25"</span>: &#123;</span><br><span class="line">      <span class="attr">"path"</span>: <span class="string">"weather[0].now.air_quality.city.pm25"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"air_quality"</span>: &#123;</span><br><span class="line">      <span class="attr">"path"</span>: <span class="string">"weather[0].now.air_quality.city.quality"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="通知"><a href="#通知" class="headerlink" title="通知"></a>通知</h2><p>通知到 slack / email 就可以了.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求&quot; class=&quot;headerlink&quot; title=&quot;需求&quot;&gt;&lt;/a&gt;需求&lt;/h2&gt;&lt;p&gt;监控天气是入门 agent 了,官方例子也有,我使用国内天气源,实现每两个小时通知我天气情况(温度,天气, pm2.5等)&lt;/p&gt;
+&lt;h2 
+      
+    
+    </summary>
+    
+      <category term="Huginn" scheme="https://blankeer.github.io/categories/Huginn/"/>
+    
+    
+      <category term="Huginn" scheme="https://blankeer.github.io/tags/Huginn/"/>
+    
+      <category term="天气" scheme="https://blankeer.github.io/tags/%E5%A4%A9%E6%B0%94/"/>
+    
+      <category term="监控" scheme="https://blankeer.github.io/tags/%E7%9B%91%E6%8E%A7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Huginn 监控甩甩尾巴物品</title>
+    <link href="https://blankeer.github.io/2018/03/22/Huginn-%E7%9B%91%E6%8E%A7%E7%94%A9%E7%94%A9%E5%B0%BE%E5%B7%B4%E7%89%A9%E5%93%81/"/>
+    <id>https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/</id>
+    <published>2018-03-21T16:40:18.000Z</published>
+    <updated>2018-03-21T16:41:10.426Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>当数字尾巴的甩甩尾巴有指定物品发布时,通知我!</p><h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><ol><li>甩甩尾巴首页:<a href="http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;ac=index&amp;typeid=&amp;PName=&amp;searchsort=0&amp;page=1,page" target="_blank" rel="noopener">http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;ac=index&amp;typeid=&amp;PName=&amp;searchsort=0&amp;page=1,page</a> 参数是页码,可以同时抓取2-3页,以免时间间隔过大发布的物品太多导致爬不到.</li><li>抓取每个物品的标题,url,地址,价格,时间,是否交易完成,提取这几个属性,使用 xpath 或者 css selector,在 w3c 上都有相关教程,推荐两个 chrome 插件,可以检查表达式的结果,<a href="https://chrome.google.com/webstore/detail/css-selector-tester/bbklnaodgoocmcdejoalmbjihhdkbfon" target="_blank" rel="noopener">CSS Selector Tester</a>,<a href="https://chrome.google.com/webstore/detail/xpath-helper/hgimnogjllphhhkhlmebbmlgjoejdpjl" target="_blank" rel="noopener">XPath Helper</a></li><li>提取数据,通过 chrome 开发者工具,可以粗略提取下,然后自己修改下表达式,基本就可以了,通过上面的插件测试下,基本就差不多了.<figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://upload-images.jianshu.io/upload_images/1340121-f176a8bbecb5fa95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">                </div>                <div class="image-caption">image.png</div>            </figure></li><li><p>贴上我写好的配置文件,新建一个 Website Agent 导入就可以了.</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"expected_update_period_in_days"</span>: <span class="string">"2"</span>,</span><br><span class="line">  <span class="attr">"url"</span>: [</span><br><span class="line">    <span class="string">"http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;ac=index&amp;typeid=&amp;PName=&amp;searchsort=0&amp;page=1"</span>,</span><br><span class="line">    <span class="string">"http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;ac=index&amp;typeid=&amp;PName=&amp;searchsort=0&amp;page=2"</span>,</span><br><span class="line">    <span class="string">"http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;ac=index&amp;typeid=&amp;PName=&amp;searchsort=0&amp;page=3"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"type"</span>: <span class="string">"html"</span>,</span><br><span class="line">  <span class="attr">"mode"</span>: <span class="string">"on_change"</span>,</span><br><span class="line">  <span class="attr">"extract"</span>: &#123;</span><br><span class="line">    <span class="attr">"title"</span>: &#123;</span><br><span class="line">      <span class="attr">"css"</span>: <span class="string">"div.tradetop &gt; p.tradetitle &gt; a"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"string(.)"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"info"</span>: &#123;</span><br><span class="line">      <span class="attr">"xpath"</span>: <span class="string">"//*[@id=\"wp\"]/div[3]/div/p[1]/."</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"normalize-space(.)"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"state"</span>: &#123;</span><br><span class="line">      <span class="attr">"css"</span>: <span class="string">"div.tradepic"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"not(contains(@class,'comp'))"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"date"</span>: &#123;</span><br><span class="line">      <span class="attr">"css"</span>: <span class="string">".tradedateline"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"string(.)"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"img"</span>: &#123;</span><br><span class="line">      <span class="attr">"css"</span>: <span class="string">".tradepic &gt; a &gt; img"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"@src"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"url"</span>: &#123;</span><br><span class="line">      <span class="attr">"css"</span>: <span class="string">".tradepic &gt; a"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"concat('http://trade.dgtle.com',@href)"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>过滤指定物品,需要创建一个<code>Trigger Agent</code>,过滤出<code>小米</code>相关物品,只要标题包含这个关键字就可以了,代码:</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"expected_receive_period_in_days"</span>: <span class="string">"2"</span>,</span><br><span class="line">  <span class="attr">"keep_event"</span>: <span class="string">"true"</span>,</span><br><span class="line">  <span class="attr">"rules"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"type"</span>: <span class="string">"regex"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"小米"</span>,</span><br><span class="line">      <span class="attr">"path"</span>: <span class="string">"title"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"message"</span>: <span class="string">"甩甩尾巴有关 `小米` 的物品更新了"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>将 event 通知到 Slack, 也可以邮件或者其他.</p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求&quot; class=&quot;headerlink&quot; title=&quot;需求&quot;&gt;&lt;/a&gt;需求&lt;/h2&gt;&lt;p&gt;当数字尾巴的甩甩尾巴有指定物品发布时,通知我!&lt;/p&gt;
+&lt;h2 id=&quot;实现&quot;&gt;&lt;a href=&quot;#实现&quot; class=&quot;headerlin
+      
+    
+    </summary>
+    
+      <category term="Huginn" scheme="https://blankeer.github.io/categories/Huginn/"/>
+    
+    
+      <category term="Huginn" scheme="https://blankeer.github.io/tags/Huginn/"/>
+    
+      <category term="监控" scheme="https://blankeer.github.io/tags/%E7%9B%91%E6%8E%A7/"/>
+    
+      <category term="数字尾巴" scheme="https://blankeer.github.io/tags/%E6%95%B0%E5%AD%97%E5%B0%BE%E5%B7%B4/"/>
+    
+      <category term="甩甩尾巴" scheme="https://blankeer.github.io/tags/%E7%94%A9%E7%94%A9%E5%B0%BE%E5%B7%B4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Huginn 安装笔记</title>
+    <link href="https://blankeer.github.io/2018/03/22/Huginn-%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/"/>
+    <id>https://blankeer.github.io/2018/03/22/Huginn-安装笔记/</id>
+    <published>2018-03-21T16:37:32.000Z</published>
+    <updated>2018-03-21T16:38:26.790Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>我用的 ubuntu + mysql, 按照教程安装,中途出现了很多问题,遇到问题搜索,好不容易才解决.<br>机器配置是 1核+ 2G,日常CPU占用&lt;5%,内存50%,内存用的比较多, cpu 用的比较少,可能是我的 agent 不多吧.</p><h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="通知"><a href="#通知" class="headerlink" title="通知"></a>通知</h3><p>通知尝试过 email slack pushbullet, 最终选择了 slack, 主要原因是: 便于管理,同类型的 event 放在同一个 channel 里,而且<code>网络通畅</code></p><h3 id="编写"><a href="#编写" class="headerlink" title="编写"></a>编写</h3><p>可以先在<a href="http://huginnio.herokuapp.com/scenarios" target="_blank" rel="noopener">这里</a>看下,有一些共享出来的scenarios,就算需求不同,也可以学习下 agent 编写的语法,很有帮助.</p><h2 id="遇到的问题和解决"><a href="#遇到的问题和解决" class="headerlink" title="遇到的问题和解决"></a>遇到的问题和解决</h2><ul><li><p>bundle install error “invalid byte sequence in US-ASCII (ArgumentError)”</p><p>可以先执行这个设置语言</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export LC_ALL=C.UTF-8</span><br><span class="line">export LANG=en_US.UTF-8</span><br><span class="line">export LANGUAGE=en_US.UTF-8</span><br></pre></td></tr></table></figure></li><li><p>An error occurred while installing nokogiri (1.6.7.1), and Bundler cannot continue</p><p>sudo apt-get install build-essential patch ruby-dev zlib1g-dev liblzma-dev</p></li><li><p>需要 swap 分区</p><p>搜索”阿里云开启 swap”,<a href="https://www.digitalocean.com/community/tutorials/how-to-add-swap-on-ubuntu-14-04" target="_blank" rel="noopener">https://www.digitalocean.com/community/tutorials/how-to-add-swap-on-ubuntu-14-04</a></p></li><li><p>diagram加载不出来,挂掉</p><p>原因是访问不了 google 的 api,办法是下载离线的graphviz安装,<code>.env</code>修改<code>USE_GRAPHVIZ_DOT=dot</code>,重新执行<code>sudo bundle exec rake production:export</code></p><p>参考:<a href="https://github.com/huginn/huginn/issues/2109" target="_blank" rel="noopener">https://github.com/huginn/huginn/issues/2109</a></p></li><li><p>css 资源挂掉,界面很丑</p><p>先编译资源,<code>sudo -u huginn -H bundle exec rake assets:precompile RAILS_ENV=production</code>,直接重启,<code>sudo bundle exec rake production:restart</code></p></li><li><p>Mysql 设置 Innodb 出现 Unknown system variable ‘storage_engine</p><p>在/etc/mysql/my.cnf 中设置 [mysqld] default-storage-engine = InnoDB</p></li></ul><ul><li><p>时区设置</p><p>Schedule 的时间不是北京时间,<code>.env</code>修改 TIMEZONE=”Beijing”</p><p>​</p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h2&gt;&lt;p&gt;我用的 ubuntu + mysql, 按照教程安装,中途出现了很多问题,遇到问题搜索,好不容易才解决.&lt;br&gt;机器配置是 1核+ 2G,日
+      
+    
+    </summary>
+    
+      <category term="Huginn" scheme="https://blankeer.github.io/categories/Huginn/"/>
+    
+    
+      <category term="Huginn" scheme="https://blankeer.github.io/tags/Huginn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Huginn Docker 安装笔记</title>
+    <link href="https://blankeer.github.io/2018/03/22/Huginn-Docker-%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/"/>
+    <id>https://blankeer.github.io/2018/03/22/Huginn-Docker-安装笔记/</id>
+    <published>2018-03-21T16:29:14.000Z</published>
+    <updated>2018-03-21T16:35:11.364Z</updated>
+    
+    <content type="html"><![CDATA[<p>官方文档:<a href="https://github.com/huginn/huginn/blob/master/doc/docker/install.md" target="_blank" rel="noopener">https://github.com/huginn/huginn/blob/master/doc/docker/install.md</a><br>官方文档没有详细说明 Docker 怎么和本机数据库连接的,以下是记录.</p><h1 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h1><p>安装官方文档安装</p><h1 id="安装-MySQL"><a href="#安装-MySQL" class="headerlink" title="安装 MySQL"></a>安装 MySQL</h1><p>安装完成后的配置:</p><ol><li>修改绑定 IP 为0.0.0.0, 修改<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>,<code>bind-address = 0.0.0.0</code>,重启 <code>sudo service mysql restart</code></li><li>允许 docker 访问本机数据库,本机先执行<code>ifconfig</code>看下 <code>docker0</code> 的 ip,一般是<code>172.17.0.1</code>,那么 docker ip 为<code>172.17.0.*</code>,这里自己看情况修改.然后在数据库里给这个网段 IP 操作权限,<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> ALL <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'root'</span>@<span class="string">'172.17.0.%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'pass'</span> <span class="keyword">WITH</span> <span class="keyword">GRANT</span> <span class="keyword">OPTION</span>;</span><br><span class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</span><br></pre></td></tr></table></figure></li></ol><h1 id="安装-Huginn"><a href="#安装-Huginn" class="headerlink" title="安装 Huginn"></a>安装 Huginn</h1><ul><li>首次安装:<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run  --name huginn \</span><br><span class="line">    -p 3000:3000 \</span><br><span class="line">    -e MYSQL_PORT_3306_TCP_ADDR=172.17.0.1 \</span><br><span class="line">    -e HUGINN_DATABASE_NAME=huginn \</span><br><span class="line">    -e HUGINN_DATABASE_USERNAME=root \</span><br><span class="line">    -e HUGINN_DATABASE_PASSWORD=pass \</span><br><span class="line">    huginn/huginn</span><br></pre></td></tr></table></figure></li></ul><p>如果安装中数据库报错,看下原因修改.<br>安装完成后,打开本机3000端口就可以进入首页.<br>之后再打开,直接 <code>docker start huginn</code>就行了.</p><ul><li><p>设置开机自启动:<br><code>docker update --restart=always huginn</code></p></li><li><p>自定义 .env.example 文件<br>在 docker run 下面加入</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run  --name huginn \</span><br><span class="line">    --env-file /本地路径/.env.example \</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;官方文档:&lt;a href=&quot;https://github.com/huginn/huginn/blob/master/doc/docker/install.md&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/hugin
+      
+    
+    </summary>
+    
+      <category term="Huginn" scheme="https://blankeer.github.io/categories/Huginn/"/>
+    
+    
+      <category term="Huginn" scheme="https://blankeer.github.io/tags/Huginn/"/>
+    
+      <category term="Docker" scheme="https://blankeer.github.io/tags/Docker/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>

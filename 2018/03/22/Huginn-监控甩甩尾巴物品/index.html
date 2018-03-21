@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Huginn 监控甩甩尾巴物品 | Blanke&#39;s Blog | Blanke&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Huginn,监控,数字尾巴,甩甩尾巴">
+    <meta name="description" content="需求当数字尾巴的甩甩尾巴有指定物品发布时,通知我! 实现 甩甩尾巴首页:http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;amp;ac=index&amp;amp;typeid=&amp;amp;PName=&amp;amp;searchsort=0&amp;amp;page=1,page 参数是页码,可以同时抓取2-3页,以免时间间隔过大发布的物品太多导致爬不到. 抓取每个物品">
+<meta name="keywords" content="Huginn,监控,数字尾巴,甩甩尾巴">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Huginn 监控甩甩尾巴物品">
+<meta property="og:url" content="https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/index.html">
+<meta property="og:site_name" content="Blanke&#39;s Blog">
+<meta property="og:description" content="需求当数字尾巴的甩甩尾巴有指定物品发布时,通知我! 实现 甩甩尾巴首页:http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;amp;ac=index&amp;amp;typeid=&amp;amp;PName=&amp;amp;searchsort=0&amp;amp;page=1,page 参数是页码,可以同时抓取2-3页,以免时间间隔过大发布的物品太多导致爬不到. 抓取每个物品">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1340121-f176a8bbecb5fa95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-03-21T16:41:10.426Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Huginn 监控甩甩尾巴物品">
+<meta name="twitter:description" content="需求当数字尾巴的甩甩尾巴有指定物品发布时,通知我! 实现 甩甩尾巴首页:http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;amp;ac=index&amp;amp;typeid=&amp;amp;PName=&amp;amp;searchsort=0&amp;amp;page=1,page 参数是页码,可以同时抓取2-3页,以免时间间隔过大发布的物品太多导致爬不到. 抓取每个物品">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1340121-f176a8bbecb5fa95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+        <link rel="alternate" type="application/atom+xml" title="Blanke&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Blanke</h5>
+          <a href="mailto:blankeeee@gmail.com" title="blankeeee@gmail.com" class="mail">blankeeee@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/blankeer" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Huginn 监控甩甩尾巴物品</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Huginn 监控甩甩尾巴物品</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-21T16:40:18.000Z" itemprop="datePublished" class="page-time">
+  2018-03-22
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Huginn/">Huginn</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#需求"><span class="post-toc-number">1.</span> <span class="post-toc-text">需求</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实现"><span class="post-toc-number">2.</span> <span class="post-toc-text">实现</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Huginn-监控甩甩尾巴物品"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Huginn 监控甩甩尾巴物品</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-22 00:40:18" datetime="2018-03-21T16:40:18.000Z"  itemprop="datePublished">2018-03-22</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Huginn/">Huginn</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>当数字尾巴的甩甩尾巴有指定物品发布时,通知我!</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><ol>
+<li>甩甩尾巴首页:<a href="http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;ac=index&amp;typeid=&amp;PName=&amp;searchsort=0&amp;page=1,page" target="_blank" rel="noopener">http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;ac=index&amp;typeid=&amp;PName=&amp;searchsort=0&amp;page=1,page</a> 参数是页码,可以同时抓取2-3页,以免时间间隔过大发布的物品太多导致爬不到.</li>
+<li>抓取每个物品的标题,url,地址,价格,时间,是否交易完成,提取这几个属性,使用 xpath 或者 css selector,在 w3c 上都有相关教程,推荐两个 chrome 插件,可以检查表达式的结果,<a href="https://chrome.google.com/webstore/detail/css-selector-tester/bbklnaodgoocmcdejoalmbjihhdkbfon" target="_blank" rel="noopener">CSS Selector Tester</a>,<a href="https://chrome.google.com/webstore/detail/xpath-helper/hgimnogjllphhhkhlmebbmlgjoejdpjl" target="_blank" rel="noopener">XPath Helper</a></li>
+<li>提取数据,通过 chrome 开发者工具,可以粗略提取下,然后自己修改下表达式,基本就可以了,通过上面的插件测试下,基本就差不多了.<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://upload-images.jianshu.io/upload_images/1340121-f176a8bbecb5fa95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure></li>
+<li><p>贴上我写好的配置文件,新建一个 Website Agent 导入就可以了.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"expected_update_period_in_days"</span>: <span class="string">"2"</span>,</span><br><span class="line">  <span class="attr">"url"</span>: [</span><br><span class="line">    <span class="string">"http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;ac=index&amp;typeid=&amp;PName=&amp;searchsort=0&amp;page=1"</span>,</span><br><span class="line">    <span class="string">"http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;ac=index&amp;typeid=&amp;PName=&amp;searchsort=0&amp;page=2"</span>,</span><br><span class="line">    <span class="string">"http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;ac=index&amp;typeid=&amp;PName=&amp;searchsort=0&amp;page=3"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"type"</span>: <span class="string">"html"</span>,</span><br><span class="line">  <span class="attr">"mode"</span>: <span class="string">"on_change"</span>,</span><br><span class="line">  <span class="attr">"extract"</span>: &#123;</span><br><span class="line">    <span class="attr">"title"</span>: &#123;</span><br><span class="line">      <span class="attr">"css"</span>: <span class="string">"div.tradetop &gt; p.tradetitle &gt; a"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"string(.)"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"info"</span>: &#123;</span><br><span class="line">      <span class="attr">"xpath"</span>: <span class="string">"//*[@id=\"wp\"]/div[3]/div/p[1]/."</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"normalize-space(.)"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"state"</span>: &#123;</span><br><span class="line">      <span class="attr">"css"</span>: <span class="string">"div.tradepic"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"not(contains(@class,'comp'))"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"date"</span>: &#123;</span><br><span class="line">      <span class="attr">"css"</span>: <span class="string">".tradedateline"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"string(.)"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"img"</span>: &#123;</span><br><span class="line">      <span class="attr">"css"</span>: <span class="string">".tradepic &gt; a &gt; img"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"@src"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"url"</span>: &#123;</span><br><span class="line">      <span class="attr">"css"</span>: <span class="string">".tradepic &gt; a"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"concat('http://trade.dgtle.com',@href)"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>过滤指定物品,需要创建一个<code>Trigger Agent</code>,过滤出<code>小米</code>相关物品,只要标题包含这个关键字就可以了,代码:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"expected_receive_period_in_days"</span>: <span class="string">"2"</span>,</span><br><span class="line">  <span class="attr">"keep_event"</span>: <span class="string">"true"</span>,</span><br><span class="line">  <span class="attr">"rules"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"type"</span>: <span class="string">"regex"</span>,</span><br><span class="line">      <span class="attr">"value"</span>: <span class="string">"小米"</span>,</span><br><span class="line">      <span class="attr">"path"</span>: <span class="string">"title"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"message"</span>: <span class="string">"甩甩尾巴有关 `小米` 的物品更新了"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将 event 通知到 Slack, 也可以邮件或者其他.</p>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-03-21T16:41:10.426Z" itemprop="dateUpdated">2018-03-22 00:41:10</time>
+</span><br>
+
+
+        
+        原始链接： <a href="/2018/03/22/Huginn-监控甩甩尾巴物品/" target="_blank" rel="external">https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://blankeer.github.io">
+            <img src="/img/avatar.png" alt="Blanke">
+            Blanke
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Huginn/">Huginn</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数字尾巴/">数字尾巴</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/甩甩尾巴/">甩甩尾巴</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/监控/">监控</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/&title=《Huginn 监控甩甩尾巴物品》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/&title=《Huginn 监控甩甩尾巴物品》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Huginn 监控甩甩尾巴物品》 — Blanke's Blog&url=https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/03/22/Huginn-监控天气情况/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Huginn 监控天气情况</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/22/Huginn-安装笔记/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Huginn 安装笔记</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "kcPiS1pwEDTH36W8q1p1jCFA-gzGzoHsz",
+            appKey: "rmU9mzztdjqK7Ql3LveykCdK",
+            avatar: "retro",
+            placeholder: "说点什么吧?",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Blanke &copy; 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/&title=《Huginn 监控甩甩尾巴物品》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/&title=《Huginn 监控甩甩尾巴物品》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Huginn 监控甩甩尾巴物品》 — Blanke's Blog&url=https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2018/03/22/Huginn-监控甩甩尾巴物品/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACvUlEQVR42u3cwWrlMAwF0Pf/Pz0DsypMknclRQmUk1VIU9vHBVuRTD+f+Prz7/p5//PJ/8/PrqT9vMfbLjw8PLzW0K8HlDzJh5L3koC/TCIeHh7eGq/aXHVA19OUvHP9W6fP8fDw8F7lJQt9suUkg8bDw8P7fbz5k3zQ+XTj4eHhPclLFvHJMn39TrWFlVwLHh4eXqcO9akuym/dr9f38PDw8FpV9esFt7dkT9ovt4aHh4e3wEuKW9Vto5fknR+3Knwx4OHh4Y15vbg0KfzPUwz5SPLpxsPDw5vweoelqhvGfKB5Ke7giwEPDw9vgZd89ufp3WpQm28MyaZ1sDHg4eHhLfCSWHuSzO0t9PNjB3h4eHh7vDwJm4e2eQvzdk5/ioeHh7fGq37k58OtBtw9WJTGxcPDw7uJlwyiGkZPSv691r70goeHh7fMmxfAeptH9XBqspHg4eHh7fGqQ8wD7huW9ZiRsPHw8PDmvKY+TqrmadzJ3+d0cvHw8PAWePNDUXn6YJJ0qIbReHh4eHu8XDkvgFWzrL1t43Tfw8PDw1vg9e57R6aqSYekRzw8PLxneHd13yt35RPUK7/h4eHh7fGSBEE+EfkhgHwzqD75IsbDw8Mb8HpF/WpQ23veC8oP0rh4eHh4t/KqRa98I0mC5pzdC9nx8PDwNniTAn/vqMF8ggoJDjw8PLxHePnSnCzc1eLW/JjXqGKGh4eHV1vPy//erlrEqi7reeoBDw8P70neZLnPk7DzcLyaDj4IqfHw8PBu4uVX0k3SQp6SSEJtPDw8vLd41VJT0k2CTALx6rTi4eHhPcnbS61eh+N5v73tBw8PD+9dXi9ZkCSF79pmTpO5eHh4eK/y8sA3X+iTUL75Ph4eHt4aL09G9MpXveW+mqQ4eB8PDw9vgdcrgE1KZdVgvZB66F14eHh4Ke8vuZLaT9omSKIAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

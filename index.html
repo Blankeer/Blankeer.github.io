@@ -150,6 +150,253 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-Huginn-我在-slack-发条消息-然后我的-vps-就重启了"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-03-22 00:43:51" datetime="2018-03-21T16:43:51.000Z"  itemprop="datePublished">2018-03-22</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Huginn/">Huginn</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/">[Huginn]我在 slack 发条消息,然后我的 vps 就重启了</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        需求有时候重启 vps,需要登录在网页上操作,很麻烦,查了下有相关的 api 做这个事,最好是我在 slack 里发条消息(重启 xx 主机),然后自动重启.
+重点实现的重点是 怎么让 Huginn 收到 slack 的消息,huginn 上的 slack agent 是发送消息到 slack, 而不能反过来,查了下 slack 文档,能实现的是 bot 和 app,决定采用 app
+实现首...
+    
+
+        <a href="/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Huginn/">Huginn</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Slack/">Slack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VPS/">VPS</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-Huginn-监控天气情况"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-03-22 00:42:14" datetime="2018-03-21T16:42:14.000Z"  itemprop="datePublished">2018-03-22</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Huginn/">Huginn</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/03/22/Huginn-监控天气情况/">Huginn 监控天气情况</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        需求监控天气是入门 agent 了,官方例子也有,我使用国内天气源,实现每两个小时通知我天气情况(温度,天气, pm2.5等)
+API天气情况当然得找 API 了,使用了这个 repo 里的
+实现1234567891011121314151617181920212223&#123;  "expected_update_period_in_days": "2",  "url": "http:/...
+    
+
+        <a href="/2018/03/22/Huginn-监控天气情况/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Huginn/">Huginn</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/天气/">天气</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/监控/">监控</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-Huginn-监控甩甩尾巴物品"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-03-22 00:40:18" datetime="2018-03-21T16:40:18.000Z"  itemprop="datePublished">2018-03-22</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Huginn/">Huginn</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/03/22/Huginn-监控甩甩尾巴物品/">Huginn 监控甩甩尾巴物品</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        需求当数字尾巴的甩甩尾巴有指定物品发布时,通知我!
+实现
+甩甩尾巴首页:http://trade.dgtle.com/dgtle_module.php?mod=trade&amp;ac=index&amp;typeid=&amp;PName=&amp;searchsort=0&amp;page=1,page 参数是页码,可以同时抓取2-3页,以免时间间隔过大发布的物品太多导致爬不到.
+抓取每...
+    
+
+        <a href="/2018/03/22/Huginn-监控甩甩尾巴物品/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Huginn/">Huginn</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数字尾巴/">数字尾巴</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/甩甩尾巴/">甩甩尾巴</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/监控/">监控</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-Huginn-安装笔记"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-03-22 00:37:32" datetime="2018-03-21T16:37:32.000Z"  itemprop="datePublished">2018-03-22</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Huginn/">Huginn</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/03/22/Huginn-安装笔记/">Huginn 安装笔记</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        安装我用的 ubuntu + mysql, 按照教程安装,中途出现了很多问题,遇到问题搜索,好不容易才解决.机器配置是 1核+ 2G,日常CPU占用&lt;5%,内存50%,内存用的比较多, cpu 用的比较少,可能是我的 agent 不多吧.
+使用通知通知尝试过 email slack pushbullet, 最终选择了 slack, 主要原因是: 便于管理,同类型的 event 放在同一...
+    
+
+        <a href="/2018/03/22/Huginn-安装笔记/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Huginn/">Huginn</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-Huginn-Docker-安装笔记"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-03-22 00:29:14" datetime="2018-03-21T16:29:14.000Z"  itemprop="datePublished">2018-03-22</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Huginn/">Huginn</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/03/22/Huginn-Docker-安装笔记/">Huginn Docker 安装笔记</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        官方文档:https://github.com/huginn/huginn/blob/master/doc/docker/install.md官方文档没有详细说明 Docker 怎么和本机数据库连接的,以下是记录.
+安装 Docker安装官方文档安装
+安装 MySQL安装完成后的配置:
+
+修改绑定 IP 为0.0.0.0, 修改/etc/mysql/mysql.conf.d/mysqld.c...
+    
+
+        <a href="/2018/03/22/Huginn-Docker-安装笔记/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Huginn/">Huginn</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-hello-world"
   class="article-card article-type-post" itemprop="blogPost">
 

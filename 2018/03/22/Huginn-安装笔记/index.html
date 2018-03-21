@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Huginn 安装笔记 | Blanke&#39;s Blog | Blanke&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Huginn">
+    <meta name="description" content="安装我用的 ubuntu + mysql, 按照教程安装,中途出现了很多问题,遇到问题搜索,好不容易才解决.机器配置是 1核+ 2G,日常CPU占用&amp;lt;5%,内存50%,内存用的比较多, cpu 用的比较少,可能是我的 agent 不多吧. 使用通知通知尝试过 email slack pushbullet, 最终选择了 slack, 主要原因是: 便于管理,同类型的 event 放在同一个 c">
+<meta name="keywords" content="Huginn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Huginn 安装笔记">
+<meta property="og:url" content="https://blankeer.github.io/2018/03/22/Huginn-安装笔记/index.html">
+<meta property="og:site_name" content="Blanke&#39;s Blog">
+<meta property="og:description" content="安装我用的 ubuntu + mysql, 按照教程安装,中途出现了很多问题,遇到问题搜索,好不容易才解决.机器配置是 1核+ 2G,日常CPU占用&amp;lt;5%,内存50%,内存用的比较多, cpu 用的比较少,可能是我的 agent 不多吧. 使用通知通知尝试过 email slack pushbullet, 最终选择了 slack, 主要原因是: 便于管理,同类型的 event 放在同一个 c">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-21T16:38:26.790Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Huginn 安装笔记">
+<meta name="twitter:description" content="安装我用的 ubuntu + mysql, 按照教程安装,中途出现了很多问题,遇到问题搜索,好不容易才解决.机器配置是 1核+ 2G,日常CPU占用&amp;lt;5%,内存50%,内存用的比较多, cpu 用的比较少,可能是我的 agent 不多吧. 使用通知通知尝试过 email slack pushbullet, 最终选择了 slack, 主要原因是: 便于管理,同类型的 event 放在同一个 c">
+    
+        <link rel="alternate" type="application/atom+xml" title="Blanke&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Blanke</h5>
+          <a href="mailto:blankeeee@gmail.com" title="blankeeee@gmail.com" class="mail">blankeeee@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/blankeer" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Huginn 安装笔记</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Huginn 安装笔记</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-21T16:37:32.000Z" itemprop="datePublished" class="page-time">
+  2018-03-22
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Huginn/">Huginn</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安装"><span class="post-toc-number">1.</span> <span class="post-toc-text">安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用"><span class="post-toc-number">2.</span> <span class="post-toc-text">使用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#通知"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">通知</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#编写"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">编写</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#遇到的问题和解决"><span class="post-toc-number">3.</span> <span class="post-toc-text">遇到的问题和解决</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Huginn-安装笔记"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Huginn 安装笔记</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-22 00:37:32" datetime="2018-03-21T16:37:32.000Z"  itemprop="datePublished">2018-03-22</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Huginn/">Huginn</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>我用的 ubuntu + mysql, 按照教程安装,中途出现了很多问题,遇到问题搜索,好不容易才解决.<br>机器配置是 1核+ 2G,日常CPU占用&lt;5%,内存50%,内存用的比较多, cpu 用的比较少,可能是我的 agent 不多吧.</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="通知"><a href="#通知" class="headerlink" title="通知"></a>通知</h3><p>通知尝试过 email slack pushbullet, 最终选择了 slack, 主要原因是: 便于管理,同类型的 event 放在同一个 channel 里,而且<code>网络通畅</code></p>
+<h3 id="编写"><a href="#编写" class="headerlink" title="编写"></a>编写</h3><p>可以先在<a href="http://huginnio.herokuapp.com/scenarios" target="_blank" rel="noopener">这里</a>看下,有一些共享出来的scenarios,就算需求不同,也可以学习下 agent 编写的语法,很有帮助.</p>
+<h2 id="遇到的问题和解决"><a href="#遇到的问题和解决" class="headerlink" title="遇到的问题和解决"></a>遇到的问题和解决</h2><ul>
+<li><p>bundle install error “invalid byte sequence in US-ASCII (ArgumentError)”</p>
+<p>可以先执行这个设置语言</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export LC_ALL=C.UTF-8</span><br><span class="line">export LANG=en_US.UTF-8</span><br><span class="line">export LANGUAGE=en_US.UTF-8</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>An error occurred while installing nokogiri (1.6.7.1), and Bundler cannot continue</p>
+<p>sudo apt-get install build-essential patch ruby-dev zlib1g-dev liblzma-dev</p>
+</li>
+<li><p>需要 swap 分区</p>
+<p>搜索”阿里云开启 swap”,<a href="https://www.digitalocean.com/community/tutorials/how-to-add-swap-on-ubuntu-14-04" target="_blank" rel="noopener">https://www.digitalocean.com/community/tutorials/how-to-add-swap-on-ubuntu-14-04</a></p>
+</li>
+<li><p>diagram加载不出来,挂掉</p>
+<p>原因是访问不了 google 的 api,办法是下载离线的graphviz安装,<code>.env</code>修改<code>USE_GRAPHVIZ_DOT=dot</code>,重新执行<code>sudo bundle exec rake production:export</code></p>
+<p>参考:<a href="https://github.com/huginn/huginn/issues/2109" target="_blank" rel="noopener">https://github.com/huginn/huginn/issues/2109</a></p>
+</li>
+<li><p>css 资源挂掉,界面很丑</p>
+<p>先编译资源,<code>sudo -u huginn -H bundle exec rake assets:precompile RAILS_ENV=production</code>,直接重启,<code>sudo bundle exec rake production:restart</code></p>
+</li>
+<li><p>Mysql 设置 Innodb 出现 Unknown system variable ‘storage_engine</p>
+<p>在/etc/mysql/my.cnf 中设置 [mysqld] default-storage-engine = InnoDB</p>
+</li>
+</ul>
+<ul>
+<li><p>时区设置</p>
+<p>Schedule 的时间不是北京时间,<code>.env</code>修改 TIMEZONE=”Beijing”</p>
+<p>​</p>
+</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-03-21T16:38:26.790Z" itemprop="dateUpdated">2018-03-22 00:38:26</time>
+</span><br>
+
+
+        
+        原始链接： <a href="/2018/03/22/Huginn-安装笔记/" target="_blank" rel="external">https://blankeer.github.io/2018/03/22/Huginn-安装笔记/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://blankeer.github.io">
+            <img src="/img/avatar.png" alt="Blanke">
+            Blanke
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Huginn/">Huginn</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2018/03/22/Huginn-安装笔记/&title=《Huginn 安装笔记》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2018/03/22/Huginn-安装笔记/&title=《Huginn 安装笔记》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2018/03/22/Huginn-安装笔记/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Huginn 安装笔记》 — Blanke's Blog&url=https://blankeer.github.io/2018/03/22/Huginn-安装笔记/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2018/03/22/Huginn-安装笔记/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/03/22/Huginn-监控甩甩尾巴物品/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Huginn 监控甩甩尾巴物品</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/22/Huginn-Docker-安装笔记/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Huginn Docker 安装笔记</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "kcPiS1pwEDTH36W8q1p1jCFA-gzGzoHsz",
+            appKey: "rmU9mzztdjqK7Ql3LveykCdK",
+            avatar: "retro",
+            placeholder: "说点什么吧?",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Blanke &copy; 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2018/03/22/Huginn-安装笔记/&title=《Huginn 安装笔记》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2018/03/22/Huginn-安装笔记/&title=《Huginn 安装笔记》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2018/03/22/Huginn-安装笔记/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Huginn 安装笔记》 — Blanke's Blog&url=https://blankeer.github.io/2018/03/22/Huginn-安装笔记/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2018/03/22/Huginn-安装笔记/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKUlEQVR42u3aMZLDIAwF0Nz/0t5miy3WzpcgmQEelSfjwXoUCkK8XvG4/oy7X5L3R+acMDAwMJZlXI8jD7o3892b1RkwMDBOYDwH9/ycvPkcbvLdNzFjYGBg3ATUS8cYGBgY32HkybeXlDEwMDB6RWxesubpNd96TqvFMTAwFmTkp+7ff/5IfwMDA2MpxlUcOTU/XBuJ53dODAyMrRl5ghvBPIeYz/AmHgwMjK0ZI5+v/l49sCtvFjEwMDZl9IrJ6mWy5FpY9fn2fwMDA2MjRn4cnzcs89SZFL1REwIDA+MYRu9Qvtr47JWyb5YYAwNja0a1iE1SbfX4rJqCJ9TiGBgYSzF6V6zyTVs+c94k+IeNgYFxAGP8A73js2bQSRGLgYGxHaN6CWwk1Y6TbjsbGBgYmzJmFauzlmPanREMDIyNGNUNXG+dendAkm1i1InFwMBYnNFrSY58oHdRrDwwMDA2ZeTl5XhCrC7NhG0iBgbG4ozniUaakUmZOi2hY2BgHMAoZ+hgK1k96B9qLWBgYBzAyJNjXqb2NpHVNI2BgXEO4znQnJovweTrsxgYGJsyruKoFqLJZYs8rUebQgwMjO0YI2mudwyXNAB6lzMwMDD2ZuRJttoAqDZBR0plDAyMExi9ZmQ1iHyZhmpxDAyM4xl5idubodAMwMDAwBhIiLPaCYWmAgYGxgGMXjMg/6WXoD9y3IaBgbEgo5pG83dmBTGtkYmBgbEe4wf4ucYEygMRiwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
