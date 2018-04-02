@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>RxJava 1.x 源码分析 | Blanke&#39;s Blog | Blanke&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Android,RxJava">
+    <meta name="description" content="Demo 分析最简单的 demo123456789101112131415161718192021222324Observable.OnSubscribe sourceOnSubscribe = new Observable.OnSubscribe&amp;lt;String&amp;gt;() &amp;#123;    @Override    public void call(Subscriber&amp;lt;? sup">
+<meta name="keywords" content="Android,RxJava">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJava 1.x 源码分析">
+<meta property="og:url" content="https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/index.html">
+<meta property="og:site_name" content="Blanke&#39;s Blog">
+<meta property="og:description" content="Demo 分析最简单的 demo123456789101112131415161718192021222324Observable.OnSubscribe sourceOnSubscribe = new Observable.OnSubscribe&amp;lt;String&amp;gt;() &amp;#123;    @Override    public void call(Subscriber&amp;lt;? sup">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://plantuml.com/plantuml/png/bP0n3i8m34Ntd29ZCb1s1XR4IeToWIIr42A9aUjGZa-1gereEh1-_UTdsoJ6c8854iOnaWmW0iZDNdQOo44TcsGxHrSBSYSZz39BL5LLUgpNjWDw6ElVFKTW6DHYX1PPRNRaw4Sn1QKHNnyRkW1FCOte7EJB5JpTTCJl92qMzR8FOpEahCf0wN_EUB_kowehV8koHxgLWUA69tYoEki_Y0E6kmU6LkajnYCHaXg-_W80">
+<meta property="og:image" content="http://plantuml.com/plantuml/png/ZLAzJiCm4Dxp51uT2SJEq0N1LYe1Bt1s3gY8xUXijpm-Hzk4EBwW3bdklZz_5yWf-EmCKWCs1L8E6uVgTgDYo6HnPoBI0KoFwbuv63H_JzctJRLcIl2lsKHBUuDR69ZWyQXsnL2dptsy-K-4TuMf9OI4kjHkBo6Nu3XYT0Bwm3HnY1a5bibB2FFPXQT92-ZgSHRwNh1PuCuX2vFVLhRpMQKo5LIB2Q6XwtJX8V64SsOVuHqdu59ZvJWhVKdeo-mlozYQx3J3hP2xe8w1lcH2dUqPlvD-EzrojZb3kTunZOGG_usJtajxhVr3S4EF2JlTtWN_I1H8uxLUA-Jc1m00">
+<meta property="og:image" content="http://plantuml.com/plantuml/png/ZPAz3e8m4CTtdg9ZIGHt1nVZPYHHNw2jfo4MIev3VNoBKgLG32FNt_-ZFKH3fcmA2HW9HGPP0L41B5apKm6ATh9Y9JnOrdtoD4tZ3gbDWmeoMGFUXTHWKPrVY3jf78s8rhWyDh9Mc4lOMThv-rFUenR__Tf8huD240HyaEDAZ_3QKPm4Ne6-AfitWAryo5W36sIdn4Fu-B9AQ1r86eB-1gP4ZaY2KMsT7nwAy0dlBW6wU_tVWMlcstpNr0Cdr6V37WPlOK6Wt1wUn4-VX-uTJUtbZH_YsVORKrGQ2CuyNffoYsZ_TvYTDg5-0G00">
+<meta property="og:updated_time" content="2018-04-02T12:43:42.176Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxJava 1.x 源码分析">
+<meta name="twitter:description" content="Demo 分析最简单的 demo123456789101112131415161718192021222324Observable.OnSubscribe sourceOnSubscribe = new Observable.OnSubscribe&amp;lt;String&amp;gt;() &amp;#123;    @Override    public void call(Subscriber&amp;lt;? sup">
+<meta name="twitter:image" content="http://plantuml.com/plantuml/png/bP0n3i8m34Ntd29ZCb1s1XR4IeToWIIr42A9aUjGZa-1gereEh1-_UTdsoJ6c8854iOnaWmW0iZDNdQOo44TcsGxHrSBSYSZz39BL5LLUgpNjWDw6ElVFKTW6DHYX1PPRNRaw4Sn1QKHNnyRkW1FCOte7EJB5JpTTCJl92qMzR8FOpEahCf0wN_EUB_kowehV8koHxgLWUA69tYoEki_Y0E6kmU6LkajnYCHaXg-_W80">
+    
+        <link rel="alternate" type="application/atom+xml" title="Blanke&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Blanke</h5>
+          <a href="mailto:blankeeee@gmail.com" title="blankeeee@gmail.com" class="mail">blankeeee@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/blankeer" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">RxJava 1.x 源码分析</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">RxJava 1.x 源码分析</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-05-21T12:39:36.000Z" itemprop="datePublished" class="page-time">
+  2017-05-21
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Demo-分析"><span class="post-toc-number">1.</span> <span class="post-toc-text">Demo 分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基本-demo-的函数调用链"><span class="post-toc-number">2.</span> <span class="post-toc-text">基本 demo 的函数调用链</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#深入使用的源码分析"><span class="post-toc-number">3.</span> <span class="post-toc-text">深入使用的源码分析</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#操作符"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">操作符</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#线程控制"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">线程控制</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-RxJava-1-x-源码分析"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">RxJava 1.x 源码分析</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-05-21 20:39:36" datetime="2017-05-21T12:39:36.000Z"  itemprop="datePublished">2017-05-21</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Demo-分析"><a href="#Demo-分析" class="headerlink" title="Demo 分析"></a>Demo 分析</h2><p>最简单的 demo<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Observable.OnSubscribe sourceOnSubscribe = <span class="keyword">new</span> Observable.OnSubscribe&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Subscriber&lt;? <span class="keyword">super</span> String&gt; subscriber)</span> </span>&#123;</span><br><span class="line">        subscriber.onNext(<span class="string">"Hello"</span>);</span><br><span class="line">        subscriber.onNext(<span class="string">"Hi"</span>);</span><br><span class="line">        subscriber.onCompleted();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">Observable sourceObservable = Observable.create(sourceOnSubscribe);</span><br><span class="line">Subscriber&lt;String&gt; targetSubscriber = <span class="keyword">new</span> Subscriber&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        Log.d(tag, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompleted</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Log.d(tag, <span class="string">"Completed!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">        Log.d(tag, <span class="string">"Error!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">sourceObservable.subscribe(targetSubscriber);</span><br></pre></td></tr></table></figure></p>
+<p>没有进行简写,每个中间变量都赋予了名字,方便后面说明.</p>
+<p>demo的输出结果就是 Hello Hi Completed!</p>
+<h2 id="基本-demo-的函数调用链"><a href="#基本-demo-的函数调用链" class="headerlink" title="基本 demo 的函数调用链"></a>基本 demo 的函数调用链</h2><p>分析上述最简单的 demo, 分析中不看 部分与性能、兼容性、扩展性有关的代码和函数调用,仅关注核心代码和调用,<br>在相关源码里,关键部分有相关注释说明.</p>
+<p>先上图.</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://plantuml.com/plantuml/png/bP0n3i8m34Ntd29ZCb1s1XR4IeToWIIr42A9aUjGZa-1gereEh1-_UTdsoJ6c8854iOnaWmW0iZDNdQOo44TcsGxHrSBSYSZz39BL5LLUgpNjWDw6ElVFKTW6DHYX1PPRNRaw4Sn1QKHNnyRkW1FCOte7EJB5JpTTCJl92qMzR8FOpEahCf0wN_EUB_kowehV8koHxgLWUA69tYoEki_Y0E6kmU6LkajnYCHaXg-_W80" alt="demo" title="">
+                </div>
+                <div class="image-caption">demo</div>
+            </figure>
+<ol>
+<li>实例化 Observable.OnSubscribe , 记为 sourceOnSubscribe.</li>
+<li>调用 Observable.create 静态方法</li>
+<li>create()内部会实例化 Observable 对象,需要传入sourceOnSubscribe,将其返回值记为 sourceObservable.</li>
+<li>实例化 Subscriber , 记为 targetSubscriber.</li>
+<li>调用 sourceObservable.subscribe(targetSubscriber) 方法,这是将观察者和观察源建立联系的地方,订阅.</li>
+<li>sourceObservable 会首先调用 targetSubscriber.onStart() 方法.</li>
+<li>sourceObservable 调用 sourceOnSubscribe 的 call(targetSubscriber)方法, 就是上面我们自定义的地方,执行到我们写的代码附近了.</li>
+<li>执行相关逻辑,上面 demo 中什么都没做,这里需要我们自己实现具体逻辑.</li>
+<li>调用 <code>targetSubscriber.onNext(T)</code> 方法,这里也是上面 demo 里自己实现的地方.</li>
+<li><code>targetSubscriber.onCompleted()</code> or <code>targetSubscriber.onError(e)</code>,整个流程跑完了.</li>
+</ol>
+<p>整个调用流程其实并不复杂,跟踪下来还是很容易的,RxJava 在内部也没做太多的事.</p>
+<h2 id="深入使用的源码分析"><a href="#深入使用的源码分析" class="headerlink" title="深入使用的源码分析"></a>深入使用的源码分析</h2><p>RxJava 最强大的就是操作符 和 线程操作,接下来看看这部分.</p>
+<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><ul>
+<li><p>map</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Func1 mapFun=<span class="keyword">new</span> Func1&lt;Integer, String&gt;() &#123;</span><br><span class="line">               <span class="meta">@Override</span></span><br><span class="line">               <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">(Integer number)</span> </span>&#123; <span class="comment">// 参数类型 int</span></span><br><span class="line">                   <span class="keyword">return</span> <span class="string">"number "</span> + number; <span class="comment">// 返回类型 String</span></span><br><span class="line">               &#125;</span><br><span class="line">           &#125;;</span><br><span class="line">Action1 action1=<span class="keyword">new</span> Action1&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(String str)</span> </span>&#123; <span class="comment">// 参数类型 String</span></span><br><span class="line">                Log.i(str);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">Observable.just(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>)</span><br><span class="line">.map(mapFun)</span><br><span class="line">.subscribe(action1);</span><br></pre></td></tr></table></figure>
+<p><img src="http://plantuml.com/plantuml/png/ZLAzJiCm4Dxp51uT2SJEq0N1LYe1Bt1s3gY8xUXijpm-Hzk4EBwW3bdklZz_5yWf-EmCKWCs1L8E6uVgTgDYo6HnPoBI0KoFwbuv63H_JzctJRLcIl2lsKHBUuDR69ZWyQXsnL2dptsy-K-4TuMf9OI4kjHkBo6Nu3XYT0Bwm3HnY1a5bibB2FFPXQT92-ZgSHRwNh1PuCuX2vFVLhRpMQKo5LIB2Q6XwtJX8V64SsOVuHqdu59ZvJWhVKdeo-mlozYQx3J3hP2xe8w1lcH2dUqPlvD-EzrojZb3kTunZOGG_usJtajxhVr3S4EF2JlTtWN_I1H8uxLUA-Jc1m00" alt="map"></p>
+</li>
+</ul>
+<ol>
+<li>调用 map(mapFun)</li>
+<li>map 方法内部实例化 OnSubscribeMap ,传入 this (Observable) 和 mapFun.</li>
+<li>调用 Observable.create 方法,生成新的 MapObservable</li>
+<li>我们调用 subscribe 时,实际上调用的是 MapObservable.subscribe().</li>
+<li>回调 onStart()</li>
+<li>调用 onSubscribeMap 的 call()</li>
+<li>生成一个新的 mapSubscriber ,之后会订阅原来的 Observable.</li>
+<li>关联两个 subscriber 的 unsubscribe()</li>
+<li>用新的 mapSubscriber 订阅原来的 Observable.</li>
+<li>原来的 Observable 回调 mapSubscriber的 onStart()</li>
+<li>调用原来的 OnSubscribe.call()</li>
+<li>OnSubscribe 内部的执行逻辑</li>
+<li>调用 mapSubscriber 的 onNext(T)</li>
+<li>mapSubscriber 会调用 mapFun.call(T) 返回 R</li>
+<li>mapSubscriber 调用真正的 targetSubscriber.onNext(R),R 是转换后的数据</li>
+</ol>
+<p>看流程有点复杂,其实也很简单,就是 map 在观察源和观察者之前做了一层转换,当发生订阅时,观察者订阅的不是真正的观察源,<br>而是 map 内部的’转换观察源’,’转换观察源’内部会再去订阅真正的观察源,然后将观察源返回的数据通过转换函数<code>mapFun</code>转换,<br>再返回给我们定义的观察者.</p>
+<ul>
+<li><p>lift 变换</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Func1&lt;Integer, String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">(Integer number)</span> </span>&#123; <span class="comment">// 参数类型 int</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">"number "</span> + number; <span class="comment">// 返回类型 String</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        Observable&lt;Integer&gt; observable = Observable.just(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);</span><br><span class="line">        observable.lift(<span class="keyword">new</span> Observable.Operator&lt;String, Integer&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span><span class="comment">//这个参数 subscriber,就是最终的,也就是我们使用时传入的</span></span><br><span class="line">            <span class="keyword">public</span> Subscriber&lt;? <span class="keyword">super</span> Integer&gt; call(<span class="keyword">final</span> Subscriber&lt;? <span class="keyword">super</span> String&gt; subscriber) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Subscriber&lt;Integer&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(Integer integer)</span> </span>&#123;</span><br><span class="line">                        subscriber.onNext(<span class="string">"number "</span> + integer);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompleted</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).subscribe(<span class="keyword">new</span> Action1&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                Log.d(s);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+<p>这个例子功能和上面 map 的例子相同,都是将数字变为字符串.</p>
+<p><img src="http://plantuml.com/plantuml/png/ZPAz3e8m4CTtdg9ZIGHt1nVZPYHHNw2jfo4MIev3VNoBKgLG32FNt_-ZFKH3fcmA2HW9HGPP0L41B5apKm6ATh9Y9JnOrdtoD4tZ3gbDWmeoMGFUXTHWKPrVY3jf78s8rhWyDh9Mc4lOMThv-rFUenR__Tf8huD240HyaEDAZ_3QKPm4Ne6-AfitWAryo5W36sIdn4Fu-B9AQ1r86eB-1gP4ZaY2KMsT7nwAy0dlBW6wU_tVWMlcstpNr0Cdr6V37WPlOK6Wt1wUn4-VX-uTJUtbZH_YsVORKrGQ2CuyNffoYsZ_TvYTDg5-0G00" alt="lift"></p>
+<p>整体流程和 map 类似,都是生成一个中间 Subscriber ,去订阅原来的 Observable,<br>然后在 onNext 等方法里将数据处理转换之后,回调真正的 Subscriber.</p>
+</li>
+</ul>
+<h3 id="线程控制"><a href="#线程控制" class="headerlink" title="线程控制"></a>线程控制</h3><pre><code>- subscribeOn()
+  `OperatorSubscribeOn` 新建了一个 OnSubscribe,执行 call() 即产生事件.即 OperatorSubscribeOn,内部调用了线程相关.
+- observeOn()
+  使用了 lift 操作符, operator 是 `OperatorObserveOn`.内部也是线程相关代码.
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-02T12:43:42.176Z" itemprop="dateUpdated">2018-04-02 20:43:42</time>
+</span><br>
+
+
+        
+        原始链接： <a href="/2017/05/21/RxJava-1-x-源码分析/" target="_blank" rel="external">https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://blankeer.github.io">
+            <img src="/img/avatar.png" alt="Blanke">
+            Blanke
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RxJava/">RxJava</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/&title=《RxJava 1.x 源码分析》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/&title=《RxJava 1.x 源码分析》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《RxJava 1.x 源码分析》 — Blanke's Blog&url=https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/05/21/Retrofit源码分析笔记/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Retrofit源码分析笔记</h4>
+      </a>
+    </div>
+  
+
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "kcPiS1pwEDTH36W8q1p1jCFA-gzGzoHsz",
+            appKey: "rmU9mzztdjqK7Ql3LveykCdK",
+            avatar: "retro",
+            placeholder: "说点什么吧?",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Blanke &copy; 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/&title=《RxJava 1.x 源码分析》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/&title=《RxJava 1.x 源码分析》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《RxJava 1.x 源码分析》 — Blanke's Blog&url=https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2017/05/21/RxJava-1-x-源码分析/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACHklEQVR42u3aS27DMAwFwN7/0u22i9p5T3RQRBqvAjdOOClA8KOvr/j6jq/791995tWdhy8MDIyPZbRhJc/+/uvVO+8/J48NAwPjHMZVBktezxnJ976IGQMDA+MiRUZfEFRxGBgYGO9IuEn5uNaUYmBgYEya2GeHcf/Wi2NgYHwgY5IE3/36LfsNDAyMj2J8l1deAq6tMxejwsDA2JoxGZAlQU8+IY8HAwNjb8Yksd43k5OFZb6EKH4hDAyMD2e099fGcGt3orSOgYFxACNPiPf356kz/5kwMDAw8uMXbej5UYx8qYmBgYExGbStrRBeTAejESIGBsY+jPyARRt0kkwnE7PiWAYGBsYWjMnILEmRk6CLshIDA2NTRn5U67F1YxBiUib+8X/AwMDYmtEG2jafbXp94LAFBgbGpoy8BX02sa6xL8+MYGBgbMpI0uWkiW3L0HoZgIGBsTVjAmunemtrhtFOAwMDYyPGZMTfjv7XCsQoHWNgYBzMaAdkbSj59aIlxsDAOIDRfsG8yGuLyBefiYGBcQyj7XrX2tp2CVE0sRgYGNsx1oqzvFhMnp0UlxgYGCcw5jvB9tm2Va6HbhgYGJsy2iHXWgE3SdmLvxYGBsZ2jPv7+SKzPVI2aWIvFwMYGBjHMyZPtSVjkfQxMDAwlprPyaiuTeUYGBgnMPKSLh/A5Qc12mUABgbGaYxR6xin2jyItVUBBgbGpowfJA0i4Jz5lkUAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

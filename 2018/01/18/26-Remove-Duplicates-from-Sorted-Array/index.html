@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>26--Remove-Duplicates-from-Sorted-Array | Blanke&#39;s Blog | Blanke&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="LeetCode">
+    <meta name="description" content="输入: 排好序的数组输出: 返回不重复的个数,并修改数组为不重复的数组,要求不能使用额外的空间思路: 循环判断前一个和当前是否相等,循环移动位置.12345678910111213141516171819202122232425262728293031323334353637class Solution &amp;#123;    public int removeDuplicates(int[] num">
+<meta name="keywords" content="LeetCode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="26--Remove-Duplicates-from-Sorted-Array">
+<meta property="og:url" content="https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/index.html">
+<meta property="og:site_name" content="Blanke&#39;s Blog">
+<meta property="og:description" content="输入: 排好序的数组输出: 返回不重复的个数,并修改数组为不重复的数组,要求不能使用额外的空间思路: 循环判断前一个和当前是否相等,循环移动位置.12345678910111213141516171819202122232425262728293031323334353637class Solution &amp;#123;    public int removeDuplicates(int[] num">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-02T12:57:28.367Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="26--Remove-Duplicates-from-Sorted-Array">
+<meta name="twitter:description" content="输入: 排好序的数组输出: 返回不重复的个数,并修改数组为不重复的数组,要求不能使用额外的空间思路: 循环判断前一个和当前是否相等,循环移动位置.12345678910111213141516171819202122232425262728293031323334353637class Solution &amp;#123;    public int removeDuplicates(int[] num">
+    
+        <link rel="alternate" type="application/atom+xml" title="Blanke&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Blanke</h5>
+          <a href="mailto:blankeeee@gmail.com" title="blankeeee@gmail.com" class="mail">blankeeee@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/blankeer" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">26--Remove-Duplicates-from-Sorted-Array</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">26--Remove-Duplicates-from-Sorted-Array</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-18T14:05:00.000Z" itemprop="datePublished" class="page-time">
+  2018-01-18
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/刷题/">刷题</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-26-Remove-Duplicates-from-Sorted-Array"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">26--Remove-Duplicates-from-Sorted-Array</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-18 22:05:00" datetime="2018-01-18T14:05:00.000Z"  itemprop="datePublished">2018-01-18</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/刷题/">刷题</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>输入: 排好序的数组<br>输出: 返回不重复的个数,并修改数组为不重复的数组,要求不能使用额外的空间<br>思路: 循环判断前一个和当前是否相等,循环移动位置.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeDuplicates</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.length==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> t=nums[<span class="number">0</span>],res=nums.length;</span><br><span class="line">        <span class="keyword">int</span> l=<span class="number">0</span>,r=-<span class="number">1</span>,count=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;nums.length-count;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> item = nums[i];</span><br><span class="line">            <span class="keyword">if</span>(item != t)&#123;</span><br><span class="line">                t = item;</span><br><span class="line">                r = i-<span class="number">1</span>;</span><br><span class="line">                <span class="keyword">int</span> len=r-l;</span><br><span class="line">                <span class="keyword">if</span>(len&gt;=<span class="number">1</span>)&#123;</span><br><span class="line">                    move(nums,l,r);</span><br><span class="line">                    count+=len;</span><br><span class="line">                &#125;</span><br><span class="line">                i-=len;</span><br><span class="line">                l = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        r = nums.length-count-<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> len=r-l;</span><br><span class="line">        <span class="keyword">if</span>(len&gt;=<span class="number">1</span>)&#123;</span><br><span class="line">            move(nums,l,r);</span><br><span class="line">            count+=len;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res - count;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">(<span class="keyword">int</span>[] nums,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len=r-l;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=l+<span class="number">1</span>;i&lt;nums.length-len;i++)&#123;</span><br><span class="line">            nums[i]=nums[i+len];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-02T12:57:28.367Z" itemprop="dateUpdated">2018-04-02 20:57:28</time>
+</span><br>
+
+
+        
+        原始链接： <a href="/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/" target="_blank" rel="external">https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://blankeer.github.io">
+            <img src="/img/avatar.png" alt="Blanke">
+            Blanke
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LeetCode/">LeetCode</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/&title=《26--Remove-Duplicates-from-Sorted-Array》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/&title=《26--Remove-Duplicates-from-Sorted-Array》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《26--Remove-Duplicates-from-Sorted-Array》 — Blanke's Blog&url=https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/23/27-Remove-Element/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">27--Remove-Element</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/16/24-Swap-Nodes-in-Pairs/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">24--Swap-Nodes-in-Pairs</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "kcPiS1pwEDTH36W8q1p1jCFA-gzGzoHsz",
+            appKey: "rmU9mzztdjqK7Ql3LveykCdK",
+            avatar: "retro",
+            placeholder: "说点什么吧?",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Blanke &copy; 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/&title=《26--Remove-Duplicates-from-Sorted-Array》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/&title=《26--Remove-Duplicates-from-Sorted-Array》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《26--Remove-Duplicates-from-Sorted-Array》 — Blanke's Blog&url=https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2018/01/18/26-Remove-Duplicates-from-Sorted-Array/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrklEQVR42u3ay47CMAwFUP7/pxlpdiMN5dqOeUinK0RLm9NFEq59u8XH/fe4Pnt9PLp+cp9jBx4eHl5r6Ne3yz9f3yF/Su9Z/7wCPDw8vDXe9WKQD6i3AFxjkrMPv8fDw8N7Ky9/BTk+weDh4eF9Ly95ZC+SSIIGPDw8vE/j5VFCOQ5oJavJ5vtw1oKHh4e3UEX6nM+L9T08PDy8wQQ9iW7zQCGZ9JujxcPDw1vg5RFqEtTmv6rGtfkW/1Z9AB4eHl6Rl8cBG3v25GVVv/lzHzw8PLxlXh5GTJaEXtRbXWbw8PDw9njVcKF3ttc0UF208PDw8F7Jq8av84m7t0iMNvp4eHh4R3mT6ftUvDtvnHqSUuPh4eEt8KrD6kUJVV4vXH74jwEPDw9vgTcZ6KkiWR49RCPEw8PDewmvWmQ61VKQN6fmoQkeHh7eWV4Cm7QIVEONatgRBbh4eHh4R3lJNNCb0PPpvlc2Ky9IeHh4eId484VhXjarFsMKrwAPDw9vgTdfGPIiWfKaemlKNGY8PDy8o7xJU1SvTX/yq/wsHh4e3gbvVLtVvjWvJiWjti08PDy8BV7SLnAPjiRiqDYfNFuskjACDw8Pb8Crbnmr2+W8easa2kbX4OHh4a3x8mk9Z/RC28kRBbh4eHh4R3nzCLUaTFTLWtU4GA8PD2+Dl0zTvXg3xyw2WuHh4eEt8PLbzQeRLDnVuPYJEg8PD2+Z1yt05VFCvi1OIo9oQ4+Hh4e3wBuFpMWhJ8WwfNI/QMLDw8Mb8OaBaT6VTwpj1U05Hh4e3jYvmZTzyT2/Pm9B6G3Z8fDw8N7LqzKqIWwecxS213h4eHgfw0sasyaNAjlvZWHAw8PDC3h5gX8ycedb57wU9+TV4OHh4S3wqgWw3ta5WhLLA4sDVT48PDy8lPcD9SWRNsghsGsAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

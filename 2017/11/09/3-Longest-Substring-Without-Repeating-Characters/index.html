@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>3--Longest-Substring-Without-Repeating-Characters | Blanke&#39;s Blog | Blanke&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="LeetCode">
+    <meta name="description" content="https://leetcode.com/problems/longest-substring-without-repeating-characters/description/输入: 字符串处理: 寻找不包含重复字符的最长子串输出: 最长子串的长度 思路:1.左指针始终指向当前子串的最左边,2.判断当前字符是否包含在当前子串中,如果在,左指针等于前面重复字符的下标+1,3.否则继续判断下一位字符">
+<meta name="keywords" content="LeetCode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3--Longest-Substring-Without-Repeating-Characters">
+<meta property="og:url" content="https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/index.html">
+<meta property="og:site_name" content="Blanke&#39;s Blog">
+<meta property="og:description" content="https://leetcode.com/problems/longest-substring-without-repeating-characters/description/输入: 字符串处理: 寻找不包含重复字符的最长子串输出: 最长子串的长度 思路:1.左指针始终指向当前子串的最左边,2.判断当前字符是否包含在当前子串中,如果在,左指针等于前面重复字符的下标+1,3.否则继续判断下一位字符">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-02T12:53:46.283Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="3--Longest-Substring-Without-Repeating-Characters">
+<meta name="twitter:description" content="https://leetcode.com/problems/longest-substring-without-repeating-characters/description/输入: 字符串处理: 寻找不包含重复字符的最长子串输出: 最长子串的长度 思路:1.左指针始终指向当前子串的最左边,2.判断当前字符是否包含在当前子串中,如果在,左指针等于前面重复字符的下标+1,3.否则继续判断下一位字符">
+    
+        <link rel="alternate" type="application/atom+xml" title="Blanke&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Blanke</h5>
+          <a href="mailto:blankeeee@gmail.com" title="blankeeee@gmail.com" class="mail">blankeeee@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/blankeer" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">3--Longest-Substring-Without-Repeating-Characters</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">3--Longest-Substring-Without-Repeating-Characters</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-09T14:26:00.000Z" itemprop="datePublished" class="page-time">
+  2017-11-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/刷题/">刷题</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-3-Longest-Substring-Without-Repeating-Characters"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">3--Longest-Substring-Without-Repeating-Characters</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-09 22:26:00" datetime="2017-11-09T14:26:00.000Z"  itemprop="datePublished">2017-11-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/刷题/">刷题</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p><a href="https://leetcode.com/problems/longest-substring-without-repeating-characters/description/" target="_blank" rel="noopener">https://leetcode.com/problems/longest-substring-without-repeating-characters/description/</a><br>输入: 字符串<br>处理: 寻找不包含重复字符的最长子串<br>输出: 最长子串的长度</p>
+<p>思路:<br>1.左指针始终指向当前子串的最左边,<br>2.判断当前字符是否包含在当前子串中,如果在,左指针等于前面重复字符的下标+1,<br>3.否则继续判断下一位字符<br>4.记录每次子串长度的最大值<br>其中第2步,可以简化为 <code>当前左指针下标</code> 和 <code>重复字符下标+1</code> 的最大值,因为: 如果当前字符不包含在当前子串中,而是在子串之前,求个最大值,也没什么不妥,代码看起来简洁很多.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        HashMap&lt;Character,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;Character,Integer&gt;();</span><br><span class="line">        <span class="keyword">int</span> max=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> left=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;s.length();i++)&#123;</span><br><span class="line">            <span class="keyword">char</span> c=s.charAt(i);</span><br><span class="line">            <span class="keyword">if</span>(map.containsKey(c))&#123;</span><br><span class="line">                left=Math.max(left,map.get(c)+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            max = Math.max(max,i-left+<span class="number">1</span>);</span><br><span class="line">            map.put(c,i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-02T12:53:46.283Z" itemprop="dateUpdated">2018-04-02 20:53:46</time>
+</span><br>
+
+
+        
+        原始链接： <a href="/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/" target="_blank" rel="external">https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://blankeer.github.io">
+            <img src="/img/avatar.png" alt="Blanke">
+            Blanke
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LeetCode/">LeetCode</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/&title=《3--Longest-Substring-Without-Repeating-Characters》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/&title=《3--Longest-Substring-Without-Repeating-Characters》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《3--Longest-Substring-Without-Repeating-Characters》 — Blanke's Blog&url=https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/13/7-Reverse-Integer/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">7--Reverse-Integer</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/08/2-Add-Two-Numbers/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">2--Add-Two-Numbers</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "kcPiS1pwEDTH36W8q1p1jCFA-gzGzoHsz",
+            appKey: "rmU9mzztdjqK7Ql3LveykCdK",
+            avatar: "retro",
+            placeholder: "说点什么吧?",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Blanke &copy; 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/&title=《3--Longest-Substring-Without-Repeating-Characters》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/&title=《3--Longest-Substring-Without-Repeating-Characters》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《3--Longest-Substring-Without-Repeating-Characters》 — Blanke's Blog&url=https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2017/11/09/3-Longest-Substring-Without-Repeating-Characters/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADJklEQVR42u3awW7qQAwFUP7/p/u2lZ4I99ogkenJCqV0MsdZGNvzeMTXz6/r2Z3f9///fL3ys8/JaslThhc2Njb2Tdg/l1eyiWf4PEzXW79e7fr+0/WxsbGxj2O3qSXPC0nKaQHX7CjJYWNjY2PH4chT4yzJYWNjY2PPltu3e655s/IGGxsb+y+z85/41yHYNJWSBlM+VHhbLw0bGxv769n5VPT7P39kvo2NjY39xexZC749XjNrPOWFTa3AxsbGPoidJ4AW1o4BElIS7nz/2NjY2KeyN4dmklTXDiRmoYleJzY2NvYR7DydJBtqxwZtK38zonhRgWFjY2Mfx25HsG2ZsWkPzYYZ2NjY2Gez22bNZjAwGxvMJrZPV8PGxsY+jp0kmyTJJWXJfniwCXQ0c8DGxsa+FXtz4PLTzaD9MdBhCLCxsbFvy25HvLPCIF+hTaL5atjY2NgnsfOGfru5PJTF2aIygUVNJWxsbOybs9uR7WbI+q46qU1gUUCxsbGxD2LnD8iD0raBPnc8qO6lYWNjY9+KPWv0bDCzQqgtQl68HmxsbOybs2fzhJ/RNStg8pXzEggbGxv7JHYC/vSDN22mzV+xsbGxT2Lvx72z0OSHcpJ91sNpbGxs7IPYLX42ym2bUDl1CMbGxsY+jt1OgzdlxixZtolzOBvBxsbGviG7HdO2iWQTvvx/6xWwsbGxD2Vv0kkSiE1oZgXS0/1gY2NjH8Fumz7tnbxIaFtUmySHjY2NfR47f+TscE9b2LSHcuomFzY2NvZB7Lzh3oLbozZtomq/E2VvbGxs7JuzH+WVJ5tN8stfRnII6UUvDRsbG/tQdlswtBvdJ7ZZvwgbGxv7PHaO37T+81C238yTGTY2NvZJ7NlP/3e1e/LQzJpWj/07xMbGxv569irvLQ7xtJt+17i3Dgo2Njb2TdizpFUPVsuwvitww/k2NjY29g3ZbWJIwrQ5AJTvJx8VYGNjY2PnIdiUCrP2Vr5DbGxsbOwEnIRg9s02gWFjY2P/HXZbWrTN/XZInIdyNmDGxsbGPomdt+9nYUrWTNLPrF2V7wcbGxv7hux/28JAO0Gxm94AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

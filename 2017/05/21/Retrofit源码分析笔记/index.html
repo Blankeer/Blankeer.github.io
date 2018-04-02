@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Retrofit源码分析笔记 | Blanke&#39;s Blog | Blanke&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Android,Retrofit">
+    <meta name="description" content="Retrofit Version:2.2.0分析代码地址:https://github.com/Blankeer/source-analysis-retrofit  环境配置相关： 发现项目是基于Maven的，于是祭出许久不用的Idea 删掉了部分对源码无用的配置文件，比如website/,CHANGELOG.md等   samples分析  123456789101112131415161718">
+<meta name="keywords" content="Android,Retrofit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Retrofit源码分析笔记">
+<meta property="og:url" content="https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/index.html">
+<meta property="og:site_name" content="Blanke&#39;s Blog">
+<meta property="og:description" content="Retrofit Version:2.2.0分析代码地址:https://github.com/Blankeer/source-analysis-retrofit  环境配置相关： 发现项目是基于Maven的，于是祭出许久不用的Idea 删掉了部分对源码无用的配置文件，比如website/,CHANGELOG.md等   samples分析  123456789101112131415161718">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-02T12:44:11.137Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Retrofit源码分析笔记">
+<meta name="twitter:description" content="Retrofit Version:2.2.0分析代码地址:https://github.com/Blankeer/source-analysis-retrofit  环境配置相关： 发现项目是基于Maven的，于是祭出许久不用的Idea 删掉了部分对源码无用的配置文件，比如website/,CHANGELOG.md等   samples分析  123456789101112131415161718">
+    
+        <link rel="alternate" type="application/atom+xml" title="Blanke&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Blanke</h5>
+          <a href="mailto:blankeeee@gmail.com" title="blankeeee@gmail.com" class="mail">blankeeee@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/blankeer" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Retrofit源码分析笔记</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Retrofit源码分析笔记</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-05-21T13:22:20.000Z" itemprop="datePublished" class="page-time">
+  2017-05-21
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-Retrofit源码分析笔记"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Retrofit源码分析笔记</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-05-21 21:22:20" datetime="2017-05-21T13:22:20.000Z"  itemprop="datePublished">2017-05-21</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Retrofit Version:<a href="https://github.com/square/retrofit/releases/tag/parent-2.2.0" target="_blank" rel="noopener">2.2.0</a><br>分析代码地址:<a href="https://github.com/Blankeer/source-analysis-retrofit" target="_blank" rel="noopener">https://github.com/Blankeer/source-analysis-retrofit</a></p>
+<ol>
+<li>环境配置相关：<ul>
+<li>发现项目是基于Maven的，于是祭出许久不用的Idea</li>
+<li>删掉了部分对源码无用的配置文件，比如website/,CHANGELOG.md等</li>
+</ul>
+</li>
+<li><p>samples分析</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">GitHub</span> </span>&#123;</span><br><span class="line">    <span class="meta">@GET</span>(<span class="string">"/repos/&#123;owner&#125;/&#123;repo&#125;/contributors"</span>)</span><br><span class="line">    Call&lt;List&lt;Contributor&gt;&gt; contributors(</span><br><span class="line">            <span class="meta">@Path</span>(<span class="string">"owner"</span>) String owner,</span><br><span class="line">            <span class="meta">@Path</span>(<span class="string">"repo"</span>) String repo);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Create a very simple REST adapter which points the GitHub API.</span></span><br><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">        .baseUrl(API_URL)</span><br><span class="line">        .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">        .build();</span><br><span class="line"><span class="comment">// Create an instance of our GitHub API interface.</span></span><br><span class="line">GitHub github = retrofit.create(GitHub.class);</span><br><span class="line"><span class="comment">// Create a call instance for looking up Retrofit contributors.</span></span><br><span class="line">Call&lt;List&lt;Contributor&gt;&gt; call = github.contributors(<span class="string">"square"</span>, <span class="string">"retrofit"</span>);</span><br><span class="line">call.enqueue(<span class="keyword">new</span> Callback&lt;List&lt;Contributor&gt;&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;List&lt;Contributor&gt;&gt; call, Response&lt;List&lt;Contributor&gt;&gt; response)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (Contributor contributor : response.body()) &#123;</span><br><span class="line">            System.out.println(contributor.login + <span class="string">" ("</span> + contributor.contributions + <span class="string">")"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call&lt;List&lt;Contributor&gt;&gt; call, Throwable t)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p> 这是最简单的用法,使用步骤:</p>
+<ol>
+<li>定义一个 API 的 Interface.包含 API 的基本信息(url,method,path,call,返回类型等)</li>
+<li>实例化Retrofit对象,配置 baseUrl 和 ConverterFactory</li>
+<li>通过 retrofit.create 方法创建 API 实例对象</li>
+<li>直接调用具体的 api 方法得到 Call 对象,调用enqueue方法传入回调</li>
+</ol>
+</li>
+<li><p>基本函数调用链</p>
+<ul>
+<li>Retrofit.Build 建造者模式</li>
+<li>Retrofit.create() 创建相应Api interface<ul>
+<li>eagerlyValidateMethods 校验解析所有method,即定义的每个api method<ul>
+<li>ServiceMethod.build() 解析interface所有method，每个method的参数封装成ServiceMethod<ul>
+<li>ServiceMethod.createCallAdapter() 每个method寻找匹配的CallAdapter，即返回值转换器<ul>
+<li>Retrofit.callAdapter() 遍历retrofit配置过的adapter，寻找匹配的那个<ul>
+<li>Retrofit.nextCallAdapter()</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ServiceMethod.createResponseConverter() 创建response转换器<ul>
+<li>Retrofit.responseBodyConverter() 寻找匹配的responseConverter<ul>
+<li>Retrofit.nextResponseBodyConverter()</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ServiceMethod.parseMethodAnnotation() 解析标记方法的每个注解，比如Get,Post等常见注解就是在这里解析<ul>
+<li>ServiceMethod.parseHttpMethodAndPath() 解析具体的Http注解和path，比如GET<ul>
+<li>ServiceMethod.parsePathParameters() 解析url包含的路径参数，即{path}，params必须包含@Path</li>
+</ul>
+</li>
+<li>ServiceMethod.parseHeaders() 解析head，通过@Headers判断</li>
+</ul>
+</li>
+<li>ServiceMethod.parseParameter() 解析每个param,返回ParameterHandler<ul>
+<li>ServiceMethod.parseParameterAnnotation() 解析参数的具体注解,常见的有@path,@query等,requestConverter和stringConverter在这会被调用<ul>
+<li>ParameterHandler 这个类主要是api方法参数的各种具体处理，添加到RequestBuilder</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Proxy.newProxyInstance() 动态代理，代理整个Api interface，当我们调用api方法时，会调用这个代理的invoke()方法，这是retrofit的核心<ul>
+<li>OkHttpCall OKHttp具体请求网络的地方,拿出初始化传入的OkHttpClient，拿出ServiceMethod.toRequest()的Request，然后怼到一起，调用okhttp的api进行网络请求和回调处理，在parseResponse()中会调用responseConverter</li>
+<li>CallAdapter.adapt() Android默认的CallAdapter在ExecutorCallAdapterFactory里，返回的是Call<t>,另外提供的有RxJava2CallAdapter,返回值是Observable</t></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>关键点的代码查看</p>
+<ol>
+<li><p>为什么只用定义一个interface，达到直接调用的效果<br> 利用了Java动态代理机制,和 AOP 一个原理，相关代码在Retrofit.create();</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> (T) Proxy.newProxyInstance(service.getClassLoader(), <span class="keyword">new</span> Class&lt;?&gt;[]&#123;service&#125;,</span><br><span class="line">                <span class="keyword">new</span> InvocationHandler() &#123;</span><br><span class="line">                    <span class="keyword">private</span> <span class="keyword">final</span> Platform platform = Platform.get();</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span></span></span><br><span class="line"><span class="function">                            <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">                        <span class="comment">//......</span></span><br><span class="line">                        <span class="comment">//NOTE-Blanke: 加载这个method，如果设置validateEagerly=true,这里是直接获取serviceMethodCache里的缓存</span></span><br><span class="line">                        ServiceMethod&lt;Object, Object&gt; serviceMethod =</span><br><span class="line">                                (ServiceMethod&lt;Object, Object&gt;) loadServiceMethod(method);</span><br><span class="line">                        <span class="comment">//NOTE-Blanke: 默认http调用OKHttp，这里可以扩展，换成别家的http框架</span></span><br><span class="line">                        OkHttpCall&lt;Object&gt; okHttpCall = <span class="keyword">new</span> OkHttpCall&lt;&gt;(serviceMethod, args);</span><br><span class="line">                        <span class="keyword">return</span> serviceMethod.callAdapter.adapt(okHttpCall);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>平常使用最多的是json，相关转换代码<br> 以Gson解析为例,相关代码在retrofit2.converter.gson.</p>
+<ul>
+<li>requestConvert<br>  见GsonRequestBodyConverter<br>  具体的转换代码在ParameterHandler.Body，具体调用链是ServiceMethod.parseParameterAnnotation()-&gt;new Body,ServiceMethod.toRequest()-&gt;Body.apply();</li>
+<li>responseConvert<br>  见GsonResponseBodyConverter<br>  具体转换代码在ServiceMethod.toResponse().具体调用链是OkHttpCall.parseResponse()-&gt;ServiceMethod.toResponse();</li>
+</ul>
+</li>
+<li>自定义CallAdapter相关<br>默认的是ExecutorCallAdapterFactory匿名类，默认的返回类型是Call.<br>调用链是Retrofit.create():<code>serviceMethod.callAdapter.adapt(okHttpCall)</code><br>RxJava是RxJava2CallAdapter，返回类型是Observable<br>自定义demo见ErrorHandlingAdapter</li>
+</ol>
+</li>
+<li>发现的设计模式<ul>
+<li>建造者模式 出现的Builder类</li>
+<li>工厂模式 以Factory结尾的类</li>
+<li>代理模式 ExecutorCallbackCall，Retrofit.create()用到了动态代理</li>
+<li>策略模式 Converter,CallAdapter等的实现</li>
+<li>适配器模式 ErrorHandlingAdapter.MyCallAdapter</li>
+<li>迭代器模式 ParameterHandler</li>
+<li>外观模式 Retrofit</li>
+</ul>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-02T12:44:11.137Z" itemprop="dateUpdated">2018-04-02 20:44:11</time>
+</span><br>
+
+
+        
+        原始链接： <a href="/2017/05/21/Retrofit源码分析笔记/" target="_blank" rel="external">https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://blankeer.github.io">
+            <img src="/img/avatar.png" alt="Blanke">
+            Blanke
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Retrofit/">Retrofit</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/&title=《Retrofit源码分析笔记》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/&title=《Retrofit源码分析笔记》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Retrofit源码分析笔记》 — Blanke's Blog&url=https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/08/1-Two-Sum/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">1--Two-Sum</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/05/21/RxJava-1-x-源码分析/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">RxJava 1.x 源码分析</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "kcPiS1pwEDTH36W8q1p1jCFA-gzGzoHsz",
+            appKey: "rmU9mzztdjqK7Ql3LveykCdK",
+            avatar: "retro",
+            placeholder: "说点什么吧?",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Blanke &copy; 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/&title=《Retrofit源码分析笔记》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/&title=《Retrofit源码分析笔记》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Retrofit源码分析笔记》 — Blanke's Blog&url=https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2017/05/21/Retrofit源码分析笔记/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACq0lEQVR42u3aQVIDQQgF0Nz/0rq1StP5QKOx6s0qZZKZflkAAo9HfH18uc6fufX6+xPPTx9deHh4eIOjn2/dO9Ct7ybv/vAT4OHh4a3xqoE+CdwvHnx8Vv7jvrDg4eHhvRnvXHD3SvDkL3h4eHj/izdvYUzKaDw8PLz34eW37qWNeYt2vdeCh4eHF/PyEP8+r1fme3h4eHjjqXo1iOeBu5ceyvfEw8PDW+BVy9nqQSeLU9Wm8NP2Bx4eHt5VXrVxkDRkz2mjlyR6KQQPDw9vg9dbBcgHV5MjTkZlL1IhHh4e3oCXlK1nZD4emySPXmrBw8PD2+BVF61uFdbnu+VPLA/G8PDw8Ma8pOSdhOnq8kG10I/me3h4eHgLvGpArxbBeVLJVxOid/Hw8PDWePMmQnOdtLg6UF1rwMPDw9vgnYdMvf/r8+J4426FGRoeHh5eizcf8E/WBfL2RPMpeHh4eGu8ZODUa/XmY62VVgUeHh7eMu986N4gPwdXE0mEx8PDw1vg9Zac5k3bXiKpDuTw8PDwtnl5kpi3ZZMCer4EhoeHh7fBSwrWvFDuFdy9VDFqRuDh4eGNeZNVqnztYJ4Gyi0MPDw8vAVePsS6u1CV/4jVgh4PDw/vd3h5uK8OqPIEUA738f3x8PDwNnh58J18sregUF1ieExyCx4eHl6LN1kmOLdu95INHh4e3l/xql+bLAc0K/34JHh4eHh7vI/iVS3Nq0O1ybDt6dIVHh4e3lVeNfhWU0ieKvImRV524+Hh4e3x5uP5PJ3krY3qGtaFARgeHh5ekVftYeRlcXUkVs1mhV4LHh4e3p/yqkfPD325nYGHh4f3lrxJ+E6K9dHADA8PD2+NN1kPzdNG3urtwZ4mBjw8PLyrvGpYnwz1q6VzNWGM5nt4eHh4r3mf7fsr8PM22OIAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
