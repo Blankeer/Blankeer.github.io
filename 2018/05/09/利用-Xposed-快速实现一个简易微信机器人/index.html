@@ -31,7 +31,8 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1340121-d6779724831e3dcc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1340121-02717958e085a261.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1340121-24322dc99cd7282d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-05-09T16:41:44.344Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1340121-3c4d1e968e8f7062.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-05-09T16:50:42.046Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用 Xposed 快速实现一个简易微信机器人">
 <meta name="twitter:description" content="本文同步至：https://www.jianshu.com/p/8d0d0b52bec6 目标当前微信网页版限制越来越多，考虑尝试在手机上实现类似机器人的功能。本文目的是利用 Xposed 快速实现简易机器人功能，包括获取好友发来的消息，以及回复消息。后续可以增加智能回复，比如接入图灵机器人，或者自己自定义实现一些功能。 快速实现项目框架的搭建WechatSpellbook - 站在”巨人”的肩膀">
@@ -163,7 +164,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#目标"><span class="post-toc-number">1.</span> <span class="post-toc-text">目标</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#快速实现"><span class="post-toc-number">2.</span> <span class="post-toc-text">快速实现</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#项目框架的搭建"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">项目框架的搭建</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#WechatSpellbook-站在”巨人”的肩膀上"><span class="post-toc-number">2.1.1.</span> <span class="post-toc-text">WechatSpellbook - 站在”巨人”的肩膀上</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#获得好友发来的消息"><span class="post-toc-number">2.1.2.</span> <span class="post-toc-text">获得好友发来的消息</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#机器人回复消息"><span class="post-toc-number">2.1.3.</span> <span class="post-toc-text">机器人回复消息</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#利用-Monitor-的-Method-Profiling-功能分析"><span class="post-toc-number">2.1.3.1.</span> <span class="post-toc-text">利用 Monitor 的 Method Profiling 功能分析</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#反编译查看源码分析"><span class="post-toc-number">2.1.3.2.</span> <span class="post-toc-text">反编译查看源码分析</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#找到的-hook-关键点"><span class="post-toc-number">2.1.3.3.</span> <span class="post-toc-text">找到的 hook 关键点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#关键点存在的问题"><span class="post-toc-number">2.1.3.4.</span> <span class="post-toc-text">关键点存在的问题</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#问题解决方法"><span class="post-toc-number">2.1.3.5.</span> <span class="post-toc-text">问题解决方法</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码实现"><span class="post-toc-number">2.1.4.</span> <span class="post-toc-text">代码实现</span></a></li></ol></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#目标"><span class="post-toc-number">1.</span> <span class="post-toc-text">目标</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#快速实现"><span class="post-toc-number">2.</span> <span class="post-toc-text">快速实现</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#项目框架的搭建"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">项目框架的搭建</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#WechatSpellbook-站在”巨人”的肩膀上"><span class="post-toc-number">2.1.1.</span> <span class="post-toc-text">WechatSpellbook - 站在”巨人”的肩膀上</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#获得好友发来的消息"><span class="post-toc-number">2.1.2.</span> <span class="post-toc-text">获得好友发来的消息</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#机器人回复消息"><span class="post-toc-number">2.1.3.</span> <span class="post-toc-text">机器人回复消息</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#利用-Monitor-的-Method-Profiling-功能分析"><span class="post-toc-number">2.1.3.1.</span> <span class="post-toc-text">利用 Monitor 的 Method Profiling 功能分析</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#反编译查看源码分析"><span class="post-toc-number">2.1.3.2.</span> <span class="post-toc-text">反编译查看源码分析</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#找到的-hook-关键点"><span class="post-toc-number">2.1.3.3.</span> <span class="post-toc-text">找到的 hook 关键点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#关键点存在的问题"><span class="post-toc-number">2.1.3.4.</span> <span class="post-toc-text">关键点存在的问题</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#问题解决方法"><span class="post-toc-number">2.1.3.5.</span> <span class="post-toc-text">问题解决方法</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码实现"><span class="post-toc-number">2.1.4.</span> <span class="post-toc-text">代码实现</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#效果图"><span class="post-toc-number">2.1.5.</span> <span class="post-toc-text">效果图</span></a></li></ol></li></ol></li></ol>
         </nav>
     </aside>
 
@@ -240,6 +241,13 @@
 <h4 id="关键点存在的问题"><a href="#关键点存在的问题" class="headerlink" title="关键点存在的问题"></a>关键点存在的问题</h4><p>上述 hook 思路存在的问题：当 hook 第二个API 时，不知道该条消息的接收者是谁，不太好设置。</p>
 <h4 id="问题解决方法"><a href="#问题解决方法" class="headerlink" title="问题解决方法"></a>问题解决方法</h4><p>既然我能 hook 这两个 API，那么我可不可以直接在调用第一个 API 的时候，将接收者 id 放在文本消息前面，然后在 hook 第二个 API 时将文本消息中的接收者 id 解析出来赋值给第0个参数。<br>新消息文本 = 接收者ID + 分隔符号 + 真实消息文本<br>分割符号可以采用特殊字符，用户不会输入的字符，比如 \t 等</p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p><a href="https://github.com/Blankeer/WechatBotXposed" target="_blank" rel="noopener">源码</a>在这里，关键地方都有注释，有兴趣可以 star</p>
+<h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://upload-images.jianshu.io/upload_images/1340121-3c4d1e968e8f7062.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
 
         </div>
 
@@ -248,7 +256,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2018-05-09T16:41:44.344Z" itemprop="dateUpdated">2018-05-10 00:41:44</time>
+    最后更新时间：<time datetime="2018-05-09T16:50:42.046Z" itemprop="dateUpdated">2018-05-10 00:50:42</time>
 </span><br>
 
 
