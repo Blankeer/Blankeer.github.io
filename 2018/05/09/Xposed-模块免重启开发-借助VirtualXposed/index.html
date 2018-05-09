@@ -20,19 +20,19 @@
     
     
     <meta name="keywords" content="Xposed,VirtualXposed">
-    <meta name="description" content="本文同步至：https://www.jianshu.com/p/938e8c4c00df Xposed 模块开发痛点Xposed 模块修改之后是需要重启手机生效的，导致开发非常麻烦，改个代码运行还要重启，等待时间太长。 #现有的方案搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。参考：ht">
+    <meta name="description" content="本文同步至：https://www.jianshu.com/p/938e8c4c00df Xposed 模块开发痛点Xposed 模块修改之后是需要重启手机生效的，导致开发非常麻烦，改个代码运行还要重启，等待时间太长。 现有的方案搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。参考：htt">
 <meta name="keywords" content="Xposed,VirtualXposed">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Xposed 模块免重启开发(借助VirtualXposed)">
 <meta property="og:url" content="https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/index.html">
 <meta property="og:site_name" content="Blanke&#39;s Blog">
-<meta property="og:description" content="本文同步至：https://www.jianshu.com/p/938e8c4c00df Xposed 模块开发痛点Xposed 模块修改之后是需要重启手机生效的，导致开发非常麻烦，改个代码运行还要重启，等待时间太长。 #现有的方案搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。参考：ht">
+<meta property="og:description" content="本文同步至：https://www.jianshu.com/p/938e8c4c00df Xposed 模块开发痛点Xposed 模块修改之后是需要重启手机生效的，导致开发非常麻烦，改个代码运行还要重启，等待时间太长。 现有的方案搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。参考：htt">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1340121-bd38cde2cf2897b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-05-09T04:35:41.159Z">
+<meta property="og:updated_time" content="2018-05-09T04:42:39.425Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Xposed 模块免重启开发(借助VirtualXposed)">
-<meta name="twitter:description" content="本文同步至：https://www.jianshu.com/p/938e8c4c00df Xposed 模块开发痛点Xposed 模块修改之后是需要重启手机生效的，导致开发非常麻烦，改个代码运行还要重启，等待时间太长。 #现有的方案搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。参考：ht">
+<meta name="twitter:description" content="本文同步至：https://www.jianshu.com/p/938e8c4c00df Xposed 模块开发痛点Xposed 模块修改之后是需要重启手机生效的，导致开发非常麻烦，改个代码运行还要重启，等待时间太长。 现有的方案搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。参考：htt">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1340121-bd38cde2cf2897b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     
         <link rel="alternate" type="application/atom+xml" title="Blanke&#39;s Blog" href="/atom.xml">
@@ -161,7 +161,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Xposed-模块开发痛点"><span class="post-toc-number">1.</span> <span class="post-toc-text">Xposed 模块开发痛点</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#VirtualXposed-方案"><span class="post-toc-number">2.</span> <span class="post-toc-text">VirtualXposed 方案</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Gradle-Task-实现自动重启-VirtualXposed，自动更新模块"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">Gradle Task 实现自动重启 VirtualXposed，自动更新模块</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Xposed-模块开发痛点"><span class="post-toc-number">1.</span> <span class="post-toc-text">Xposed 模块开发痛点</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#现有的方案"><span class="post-toc-number">2.</span> <span class="post-toc-text">现有的方案</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#VirtualXposed-方案"><span class="post-toc-number">3.</span> <span class="post-toc-text">VirtualXposed 方案</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Gradle-Task-实现自动重启-VirtualXposed，自动更新模块"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">Gradle Task 实现自动重启 VirtualXposed，自动更新模块</span></a></li></ol></li></ol>
         </nav>
     </aside>
 
@@ -189,7 +189,7 @@
         <div class="post-content" id="post-content" itemprop="postContent">
             <p>本文同步至：<a href="https://www.jianshu.com/p/938e8c4c00df" target="_blank" rel="noopener">https://www.jianshu.com/p/938e8c4c00df</a></p>
 <h1 id="Xposed-模块开发痛点"><a href="#Xposed-模块开发痛点" class="headerlink" title="Xposed 模块开发痛点"></a>Xposed 模块开发痛点</h1><p>Xposed 模块修改之后是需要重启手机生效的，导致开发非常麻烦，改个代码运行还要重启，等待时间太长。</p>
-<p>#现有的方案<br>搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。<br>参考：<br><a href="https://github.com/shuihuadx/XposedHook" target="_blank" rel="noopener">https://github.com/shuihuadx/XposedHook</a><br><a href="https://www.jianshu.com/p/d5596196bd12" target="_blank" rel="noopener">https://www.jianshu.com/p/d5596196bd12</a><br><a href="https://bbs.pediy.com/thread-223713.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-223713.htm</a><br><a href="http://androidwing.net/index.php/274" target="_blank" rel="noopener">http://androidwing.net/index.php/274</a></p>
+<h1 id="现有的方案"><a href="#现有的方案" class="headerlink" title="现有的方案"></a>现有的方案</h1><p>搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。<br>参考：<br><a href="https://github.com/shuihuadx/XposedHook" target="_blank" rel="noopener">https://github.com/shuihuadx/XposedHook</a><br><a href="https://www.jianshu.com/p/d5596196bd12" target="_blank" rel="noopener">https://www.jianshu.com/p/d5596196bd12</a><br><a href="https://bbs.pediy.com/thread-223713.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-223713.htm</a><br><a href="http://androidwing.net/index.php/274" target="_blank" rel="noopener">http://androidwing.net/index.php/274</a></p>
 <h1 id="VirtualXposed-方案"><a href="#VirtualXposed-方案" class="headerlink" title="VirtualXposed 方案"></a>VirtualXposed 方案</h1><p><a href="https://github.com/android-hacker/VirtualXposed" target="_blank" rel="noopener">VirtualXposed</a> 主要功能是在非ROOT环境下运行Xposed模块。使用之后觉得它比较适合模块开发，原因几下几点：</p>
 <ol>
 <li>支持免重启手机激活模块</li>
@@ -226,7 +226,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2018-05-09T04:35:41.159Z" itemprop="dateUpdated">2018-05-09 12:35:41</time>
+    最后更新时间：<time datetime="2018-05-09T04:42:39.425Z" itemprop="dateUpdated">2018-05-09 12:42:39</time>
 </span><br>
 
 
