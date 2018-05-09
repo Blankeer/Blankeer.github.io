@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Xposed 模块免重启开发(借助VirtualXposed) | Blanke&#39;s Blog | Blanke&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Xposed,借助VirtualXposed">
+    <meta name="description" content="本文同步至：https://www.jianshu.com/p/938e8c4c00df Xposed 模块开发痛点Xposed 模块修改之后是需要重启手机生效的，导致开发非常麻烦，改个代码运行还要重启，等待时间太长。 #现有的方案搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。参考：ht">
+<meta name="keywords" content="Xposed,借助VirtualXposed">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Xposed 模块免重启开发(借助VirtualXposed)">
+<meta property="og:url" content="https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/index.html">
+<meta property="og:site_name" content="Blanke&#39;s Blog">
+<meta property="og:description" content="本文同步至：https://www.jianshu.com/p/938e8c4c00df Xposed 模块开发痛点Xposed 模块修改之后是需要重启手机生效的，导致开发非常麻烦，改个代码运行还要重启，等待时间太长。 #现有的方案搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。参考：ht">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1340121-bd38cde2cf2897b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-05-09T04:33:15.395Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Xposed 模块免重启开发(借助VirtualXposed)">
+<meta name="twitter:description" content="本文同步至：https://www.jianshu.com/p/938e8c4c00df Xposed 模块开发痛点Xposed 模块修改之后是需要重启手机生效的，导致开发非常麻烦，改个代码运行还要重启，等待时间太长。 #现有的方案搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。参考：ht">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1340121-bd38cde2cf2897b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+        <link rel="alternate" type="application/atom+xml" title="Blanke&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Blanke</h5>
+          <a href="mailto:blankeeee@gmail.com" title="blankeeee@gmail.com" class="mail">blankeeee@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/blankeer" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Xposed 模块免重启开发(借助VirtualXposed)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Xposed 模块免重启开发(借助VirtualXposed)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-05-09T04:31:05.000Z" itemprop="datePublished" class="page-time">
+  2018-05-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Xposed/">Xposed</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Xposed-模块开发痛点"><span class="post-toc-number">1.</span> <span class="post-toc-text">Xposed 模块开发痛点</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Gradle-Task-实现自动重启-VirtualXposed，自动更新模块"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Gradle Task 实现自动重启 VirtualXposed，自动更新模块</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Xposed-模块免重启开发-借助VirtualXposed"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Xposed 模块免重启开发(借助VirtualXposed)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-05-09 12:31:05" datetime="2018-05-09T04:31:05.000Z"  itemprop="datePublished">2018-05-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Xposed/">Xposed</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文同步至：<a href="https://www.jianshu.com/p/938e8c4c00df" target="_blank" rel="noopener">https://www.jianshu.com/p/938e8c4c00df</a></p>
+<h1 id="Xposed-模块开发痛点"><a href="#Xposed-模块开发痛点" class="headerlink" title="Xposed 模块开发痛点"></a>Xposed 模块开发痛点</h1><p>Xposed 模块修改之后是需要重启手机生效的，导致开发非常麻烦，改个代码运行还要重启，等待时间太长。</p>
+<p>#现有的方案<br>搜索了一下，有现成的方案，原理大多是修改 Xposed FrameWork 源码实现，还有一种思路是动态加载。但都有点麻烦，还存在一些问题，偶尔失效只能重启。<br>参考：<br><a href="https://github.com/shuihuadx/XposedHook" target="_blank" rel="noopener">https://github.com/shuihuadx/XposedHook</a><br><a href="https://www.jianshu.com/p/d5596196bd12" target="_blank" rel="noopener">https://www.jianshu.com/p/d5596196bd12</a><br><a href="https://bbs.pediy.com/thread-223713.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-223713.htm</a><br><a href="http://androidwing.net/index.php/274" target="_blank" rel="noopener">http://androidwing.net/index.php/274</a></p>
+<p>#VirtualXposed 方案<br><a href="https://github.com/android-hacker/VirtualXposed" target="_blank" rel="noopener">VirtualXposed</a> 主要功能是在非ROOT环境下运行Xposed模块。使用之后觉得它比较适合模块开发，原因几下几点：</p>
+<ol>
+<li>支持免重启手机激活模块</li>
+<li>对开发者友好，详见 <a href="https://github.com/android-hacker/VirtualXposed/wiki/Utilities-For-Xposed-Module-Developer" target="_blank" rel="noopener">wiki</a></li>
+<li>项目开源，作者很活跃，遇到什么问题很快可以得到答复</li>
+</ol>
+<p>但是还是有一些缺点的：</p>
+<ol>
+<li>不支持 x86，也就是不支持模拟器，只能使用真机</li>
+<li>暂不支持资源HOOK</li>
+<li>部分插件的兼容性有问题</li>
+<li>不能 hook 系统 API</li>
+<li>使用必须将需要 hook 的 APP 和模块 APP 安装到VirtualXposed</li>
+</ol>
+<p>如果以上缺点提到的有涉及的就不能使用该方案</p>
+<h2 id="Gradle-Task-实现自动重启-VirtualXposed，自动更新模块"><a href="#Gradle-Task-实现自动重启-VirtualXposed，自动更新模块" class="headerlink" title="Gradle Task 实现自动重启 VirtualXposed，自动更新模块"></a>Gradle Task 实现自动重启 VirtualXposed，自动更新模块</h2><p>以下配置环境是 Android Studio<br><a href="https://github.com/android-hacker/VirtualXposed/wiki/Utilities-For-Xposed-Module-Developer" target="_blank" rel="noopener">wiki</a> 里提供重启 VirtualXposed 、自动更新 APP，打开某 APP 的广播方式。利用这些可以编写Gradle Task 实现运行项目自动更新模块 APP，自动重启VirtualXposed，自动打开需要 hook 的 APP。<br>需要先将需要 hook 的 APP 和模块先安装到 VirtualXposed，再进行以下设置：</p>
+<ol>
+<li>将 Debug Configurations 里将 Gradle aware Make - 修改为 :app:installDebug<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://upload-images.jianshu.io/upload_images/1340121-bd38cde2cf2897b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure></li>
+<li>修改 app/build.gradle 文件，在最下面增加如下代码<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">afterEvaluate &#123;</span><br><span class="line">    installDebug.<span class="keyword">doLast</span> &#123;</span><br><span class="line">        updateVirtualXposedAPP.execute()</span><br><span class="line">        rebootVirtualXposedAPP.execute()</span><br><span class="line">        launchVirtualXposedAPP.execute()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 更新 VXP 中的 app</span></span><br><span class="line"><span class="keyword">task</span> updateVirtualXposedAPP(type: Exec) &#123;</span><br><span class="line">    <span class="keyword">def</span> pkg = android.defaultConfig.applicationId</span><br><span class="line">    commandLine android.adbExecutable, <span class="string">'shell'</span>, <span class="string">'am'</span>, <span class="string">'broadcast'</span>, <span class="string">'-a'</span>, <span class="string">'io.va.exposed.CMD'</span>, <span class="string">'-e'</span>, <span class="string">'cmd'</span>, <span class="string">'update'</span>, <span class="string">'-e'</span>, <span class="string">'pkg'</span>, pkg</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 重启 VXP</span></span><br><span class="line"><span class="keyword">task</span> rebootVirtualXposedAPP(type: Exec) &#123;</span><br><span class="line">    commandLine android.adbExecutable, <span class="string">'shell'</span>, <span class="string">'am'</span>, <span class="string">'broadcast'</span>, <span class="string">'-a'</span>, <span class="string">'io.va.exposed.CMD'</span>, <span class="string">'-e'</span>, <span class="string">'cmd'</span>, <span class="string">'reboot'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 重启 VXP 需要 hook 的 APP，需要知道它的包名</span></span><br><span class="line"><span class="keyword">task</span> launchVirtualXposedAPP(type: Exec) &#123;</span><br><span class="line">    <span class="keyword">def</span> pkg = <span class="string">'com.tencent.mm'</span><span class="comment">// 需要 hook 的 app，这里是微信</span></span><br><span class="line">    commandLine android.adbExecutable, <span class="string">'shell'</span>, <span class="string">'am'</span>, <span class="string">'broadcast'</span>, <span class="string">'-a'</span>, <span class="string">'io.va.exposed.CMD'</span>, <span class="string">'-e'</span>, <span class="string">'cmd'</span>, <span class="string">'launch'</span>, <span class="string">'-e'</span>, <span class="string">'pkg'</span>, pkg</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>具体代码参见：<a href="https://github.com/Blankeer/MDWechat/blob/master/app/build.gradle#L45" target="_blank" rel="noopener">MDWechat</a><br>原理就是利用 Gradle Task 使用 adb  发送广播。<br>以上配置好就可以愉快的敲代码了。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-05-09T04:33:15.395Z" itemprop="dateUpdated">2018-05-09 12:33:15</time>
+</span><br>
+
+
+        
+        原始链接： <a href="/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/" target="_blank" rel="external">https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://blankeer.github.io">
+            <img src="/img/avatar.png" alt="Blanke">
+            Blanke
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Xposed/">Xposed</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/借助VirtualXposed/">借助VirtualXposed</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/&title=《Xposed 模块免重启开发(借助VirtualXposed)》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/&title=《Xposed 模块免重启开发(借助VirtualXposed)》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Xposed 模块免重启开发(借助VirtualXposed)》 — Blanke's Blog&url=https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/22/Huginn-我在-slack-发条消息-然后我的-vps-就重启了/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">[Huginn]我在 slack 发条消息,然后我的 vps 就重启了</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "kcPiS1pwEDTH36W8q1p1jCFA-gzGzoHsz",
+            appKey: "rmU9mzztdjqK7Ql3LveykCdK",
+            avatar: "retro",
+            placeholder: "说点什么吧?",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Blanke &copy; 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/&title=《Xposed 模块免重启开发(借助VirtualXposed)》 — Blanke's Blog&pic=https://blankeer.github.io/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/&title=《Xposed 模块免重启开发(借助VirtualXposed)》 — Blanke's Blog&source=Blanke's Blog" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Xposed 模块免重启开发(借助VirtualXposed)》 — Blanke's Blog&url=https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/&via=https://blankeer.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://blankeer.github.io/2018/05/09/Xposed-模块免重启开发-借助VirtualXposed/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADJklEQVR42u3aQW7jQAwEwPz/015gTwt4IzfJSWDRpZOhSLJqcqDJnq+v+Hj8PZ7P/Hv++ZrnK5/ver73+fN3T77+3gMHNjY29k3Yj8uj+uhr/PXCJefzZbpeaGxsbOx97OsXnb/0vDRWl+OFERsbG/sj2cmZUVGJC1ivHcLGxsbGTl6xuhzXJSrHY2NjY2MnQ6V8cN+LBCZL9oOzNGxsbOy3Z1dHP+/8+QfzbWxsbOy3ZD+OHvmgp1og879G74mNjY29iN2LZqstR7VJuH6TyXJHKQQ2Njb2bdk/MQyqBrpno98Xz8fGxsZewa4O/SehQjXErZaxJFrAxsbG3srubb5JClUVPApl4wEWNjY29lZ23gxMitxku08e9EatCDY2NvYidvKjv7dF8tS4fx4JlCNebGxs7Juwe7B808w8SM7bpHLAgI2Njb2IXRjHtMpVr/zMi2u00NjY2Ng3Zydj/QQ8GQ8dGBJVB1jY2NjY69i9wladz5wtnHlQ/Z/rsbGxsRexJz/6eyWwFx4/4iOPJbCxsbH3sfOSkCCrL5c8YV5csbGxsfex5z/65xFvPmaqxs/f3ouNjY29iJ20BPk4Pi9U1e018+EXNjY29m52NWqtjpaSV+x9V75lBxsbG/tz2L1illMni5v/kwpXYmNjY69g98pMHtZOzucjqmpxxcbGxt7ETjCTQDd5wtlqfGDvEjY2NvZN2MnNvfLQi3t/Z0SFjY2N/Tns3lgnGSpVr6k2Jy/OYGNjYy9i55tgqlFBvli94HbSPmFjY2NvZVebiuqWmkmpSyKEPGbAxsbG3sqeLMGpYVO1qZiMrrCxsbF3s6+XoNqQ5Ed13N+7FxsbG3sre9IkVEf/edPS4xU2AGFjY2PfnN0rMHlTkS/BJJAoLzo2Njb2InZ+VItHUilO5dL5WAobGxt7K7s36KlGrXkXMB9dRWEDNjY29jr2ZMyUj4GS51S3/vRCDmxsbGzsatGa4HvF70VJw8bGxv5I9gTfi5CTpWxO0bCxsbHXsSdffGpUlG/fyZcDGxsb+xPYvaC3F9Ym22uq/5K8lB7It7GxsbHfi/0His8cX9PRfXMAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
